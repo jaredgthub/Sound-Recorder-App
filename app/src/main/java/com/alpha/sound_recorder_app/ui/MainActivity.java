@@ -1,9 +1,13 @@
-package com.alpha.sound_recorder_app;
+package com.alpha.sound_recorder_app.ui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.alpha.sound_recorder_app.R;
+import com.alpha.sound_recorder_app.dao.Db;
+import com.alpha.sound_recorder_app.dao.UserDao;
 
 
 public class MainActivity extends ActionBarActivity {

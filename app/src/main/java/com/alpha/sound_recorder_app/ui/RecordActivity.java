@@ -1,4 +1,4 @@
-package com.alpha.sound_recorder_app;
+package com.alpha.sound_recorder_app.ui;
 
 /**
  * Created by huangshihe on 2015/7/14.
@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.alpha.sound_recorder_app.R;
+
 public class RecordActivity extends Activity {
 
     private static final String LOG_TAG = "AudioRecordTest";
     //语音文件保存路径
-    private String FileName = null;
+    private String fileName = null;
 
     //界面控件
     private Button startRecordBtn;
@@ -58,19 +60,21 @@ public class RecordActivity extends Activity {
         stopPlayBtn.setOnClickListener(new stopPlayListener());
 
         //设置sdcard的路径
-        FileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         //TODO random record name.
-        FileName += "/hello.3gp";
+        fileName += "/hello.3gp";
     }
 
-    //开始录音
+    /*
+     * start record
+     */
     class startRecordListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setOutputFile(FileName);
+            mRecorder.setOutputFile(fileName);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             try {
                 mRecorder.prepare();
@@ -91,7 +95,7 @@ public class RecordActivity extends Activity {
     }
 
     /**
-     * 停止录音
+     * stop record
      */
     class stopRecordListener implements OnClickListener{
         @Override
@@ -105,18 +109,18 @@ public class RecordActivity extends Activity {
     }
 
     /*
-     * 播放录音
+     * start play
      */
     class startPlayListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             mPlayer = new MediaPlayer();
             try{
-                mPlayer.setDataSource(FileName);
+                mPlayer.setDataSource(fileName);
                 mPlayer.prepare();
                 mPlayer.start();
             }catch(IOException e){
-                Log.e(LOG_TAG,"播放失败");
+                Log.e(LOG_TAG,"play fail! ");
             }
             startPlayBtn.setEnabled(false);
             stopPlayBtn.setEnabled(true);
@@ -124,7 +128,7 @@ public class RecordActivity extends Activity {
     }
 
     /*
-     * 停止播放录音
+     * stop play
      */
     class stopPlayListener implements OnClickListener{
         @Override
