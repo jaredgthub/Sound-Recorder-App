@@ -1,10 +1,15 @@
 package com.alpha.sound_recorder_app.dao;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.alpha.sound_recorder_app.model.Record;
+import com.alpha.sound_recorder_app.util.Global;
+
+import java.io.File;
 
 /**
  * Created by huangshihe on 2015/7/16.
@@ -13,10 +18,9 @@ public class RecordDao {
     private Db db;
     private SQLiteDatabase dbRead;
     private SQLiteDatabase dbWrite;
-    private Cursor cursor;
 
-    public RecordDao(Db db){
-        this.db = db;
+    public RecordDao(Context context){
+        this.db = new Db(context);
         dbWrite = db.getWritableDatabase();
         dbRead = db.getReadableDatabase();
     }
@@ -43,12 +47,18 @@ public class RecordDao {
             e.printStackTrace();
         }
 //        long flag = dbWrite.insert("record",null,cv);
-        return flag == 1;
+        return flag == (_id + 1);
     }
 
     public boolean delRecord(int _id){
+        Cursor cursor = dbRead.query("record",null,"_id=?",new String[]{""+_id},null,null,null);
+
+        while(cursor.moveToNext()){
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH + name);
+            file.delete();
+        }
         int flag = dbWrite.delete("record","_id=?",new String[]{_id+""});
-        //TODO del the real file!
         return flag == 1;
     }
 

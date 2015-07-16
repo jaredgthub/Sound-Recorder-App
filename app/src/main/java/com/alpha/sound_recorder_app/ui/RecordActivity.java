@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
+import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
 
@@ -24,7 +25,6 @@ import java.io.IOException;
 public class RecordActivity extends Activity {
 
     //语音文件保存路径
-//    private String fileName = null;
     private String fileLocation;
 
     //界面控件
@@ -37,9 +37,7 @@ public class RecordActivity extends Activity {
     //语音操作对象
     private MediaPlayer mPlayer = null;
     private MediaRecorder mRecorder = null;
-    //TODO insert into db;
-//    private Db db;
-//    private RecordDao recordDao;
+    private RecordDao recordDao;
     private Record record;
 
     /** Called when the activity is first created. */
@@ -47,6 +45,8 @@ public class RecordActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record);
+
+        recordDao = new RecordDao(this);
 
         //开始录音
         startRecordBtn = (Button)findViewById(R.id.startRecord);
@@ -75,7 +75,7 @@ public class RecordActivity extends Activity {
 
         startRecordBtn.setEnabled(true);
         stopRecordBtn.setEnabled(false);
-        startPlayBtn.setEnabled(true);
+        startPlayBtn.setEnabled(false);
         stopPlayBtn.setEnabled(false);
 
         //检测是否存在SD卡
@@ -107,8 +107,7 @@ public class RecordActivity extends Activity {
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
             record = new Record();
-            record.setName("");
-            fileLocation += record.getName() + ".3gp";
+            fileLocation += record.getName();
             mRecorder.setOutputFile(fileLocation);
 
             //设置音频文件的编码：AAC/AMR_NB/AMR_MB/Default
@@ -135,23 +134,18 @@ public class RecordActivity extends Activity {
     class stopRecordListener implements OnClickListener{
         @Override
         public void onClick(View v) {
-//            db = new Db(RecordActivity.this);
-//            recordDao = new RecordDao(db);
-//
-//            //save
-//            if(recordDao.addRecord(record)){
-//                Toast.makeText(RecordActivity.this, "save success", Toast.LENGTH_LONG).show();
-//            }else{
-//                Toast.makeText(RecordActivity.this, "save fail!", Toast.LENGTH_LONG).show();
-//            }
-//
-//            recordDao.close();
-
+            //save
+            if(recordDao.addRecord(record)){
+                Toast.makeText(RecordActivity.this, "save success! ", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(RecordActivity.this, "save fail!", Toast.LENGTH_LONG).show();
+            }
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
             startRecordBtn.setEnabled(true);
             stopRecordBtn.setEnabled(false);
+            startPlayBtn.setEnabled(true);
         }
     }
 
@@ -194,4 +188,9 @@ public class RecordActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordDao.close();
+    }
 }

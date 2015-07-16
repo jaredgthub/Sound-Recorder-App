@@ -17,10 +17,6 @@ public class Record {
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         if(name == null || "".equals(name.trim())){
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -30,9 +26,17 @@ public class Record {
             int minutes = cal.get(Calendar.MINUTE);
             int seconds = cal.get(Calendar.SECOND);
             int MI = cal.get(Calendar.MILLISECOND);
-            name = "" + year + month + days + hour + minutes + seconds + MI;
+            name = "" + year + month + days + hour + minutes + seconds + MI + ".3gp";
         }
-        this.name = name;
+        return name;
+    }
+
+    public void setName(String name) {
+        if(name == null || "".equals(name.trim())){
+            getName();
+        }else{
+            this.name = name;
+        }
     }
 
     public Date getCreateTime() {

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.Db;
@@ -26,15 +27,14 @@ public class RecordListActivity extends ListActivity {
     private SimpleCursorAdapter adapter;
     private Db db;
     private RecordDao recordDao;
-    private String fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;;
+    private String fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_list);
 
-        // 更新所有录音到数据库中
-        updateRecordList();
+        recordDao = new RecordDao(this);
 
         adapter = new SimpleCursorAdapter(this,R.layout.record_list_item,null,new String[]{"_id","name"},new int[]{R.id.idItem,R.id.nameItem});
         setListAdapter(adapter);
@@ -43,18 +43,19 @@ public class RecordListActivity extends ListActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                new AlertDialog.Builder(RecordListActivity.this).setTitle("alert").setMessage("are you sure del?")
+                new AlertDialog.Builder(RecordListActivity.this).setTitle("delete").setMessage("are you sure del?")
                         .setPositiveButton("sure", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                db = new Db(RecordListActivity.this);
-                                recordDao = new RecordDao(db);
 
                                 Cursor c = adapter.getCursor();
                                 c.moveToPosition(position);
                                 int itemId = c.getInt(c.getColumnIndex("_id"));
-                                recordDao.delRecord(itemId);
-                                recordDao.close();
+                                if (recordDao.delRecord(itemId)) {
+                                    Toast.makeText(RecordListActivity.this, "delete success! ", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(RecordListActivity.this, "delete fail! ", Toast.LENGTH_LONG).show();
+                                }
 
                                 refreshListView();
                             }
@@ -63,14 +64,23 @@ public class RecordListActivity extends ListActivity {
                 return true;
             }
         });
+
+        //点击
+//        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //播放
+//
+//            }
+//        });
+
+
+
         refreshListView();
     }
 
     public void refreshListView(){
-        db = new Db(this);
-        recordDao = new RecordDao(db);
         adapter.changeCursor(recordDao.getAllRecord());
-        recordDao.close();
     }
 
     @Override
@@ -99,11 +109,8 @@ public class RecordListActivity extends ListActivity {
      * 播放列表
      */
     public void updateRecordList(){
-        //扫描文件夹下的所有录音文件(扫描后缀，不扫描前缀)，并将数据写入数据库。
+        //扫描文件夹下的所有录音文件(扫描后缀)，并将数据写入数据库。
         // 取得指定位置的文件设置显示到播放列表
-        //清空数据库中record的记录
-        db = new Db(this);
-        recordDao = new RecordDao(db);
 
         recordDao.clearRecord();
         File rootPath = new File(fileLocation);
@@ -116,7 +123,6 @@ public class RecordListActivity extends ListActivity {
                 recordDao.addRecord(record);
             }
         }
-        recordDao.close();
     }
 
     class RecordFilter implements FilenameFilter {
@@ -124,5 +130,11 @@ public class RecordListActivity extends ListActivity {
 //            return (name.endsWith(".amr"));
             return (name.endsWith(".3gp"));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordDao.close();
     }
 }
