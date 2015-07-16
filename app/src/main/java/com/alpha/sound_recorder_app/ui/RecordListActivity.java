@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 public class RecordListActivity extends ListActivity {
 
@@ -28,6 +30,8 @@ public class RecordListActivity extends ListActivity {
     private Db db;
     private RecordDao recordDao;
     private String fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
+
+    private MediaPlayer mPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,6 @@ public class RecordListActivity extends ListActivity {
                                 } else {
                                     Toast.makeText(RecordListActivity.this, "delete fail! ", Toast.LENGTH_LONG).show();
                                 }
-
                                 refreshListView();
                             }
                         }).setNegativeButton("cancel", null).show();
@@ -66,13 +69,38 @@ public class RecordListActivity extends ListActivity {
         });
 
         //点击
-//        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //播放
-//
-//            }
-//        });
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //播放
+                Cursor cursor = adapter.getCursor();
+                cursor.moveToPosition(position);
+                String fileName = cursor.getString(cursor.getColumnIndex("name"));
+                if(mPlayer != null){
+                    mPlayer.stop();
+                    mPlayer.release();
+                    mPlayer = null;
+                }
+                mPlayer = new MediaPlayer();
+                try{
+                    mPlayer.setDataSource(fileLocation + fileName);
+                    mPlayer.prepare();
+                    mPlayer.start();
+                } catch(Exception e){
+                    Toast.makeText(RecordListActivity.this, "record file is missing !", Toast.LENGTH_LONG).show();
+
+                    new AlertDialog.Builder(RecordListActivity.this).setTitle("you need update List").setMessage("are you sure update?")
+                            .setPositiveButton("sure",new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        updateRecordList();
+                                        refreshListView();
+                                    }
+                                }
+                            ).setNegativeButton("cancel", null).show();
+                }
+            }
+        });
 
 
 
