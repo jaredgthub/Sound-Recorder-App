@@ -20,10 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".ui.RecordListActivity"-->
-            <!--android:label="@string/title_activity_record_list" >-->
-        <!--</activity>-->
+
+        <activity
+            android:name=".ui.RecordListActivity"
+            android:label="@string/title_activity_record_list" >
+        </activity>
+        
+        <!--<activity android:name="."-->
+
     </application>
 
 </manifest>

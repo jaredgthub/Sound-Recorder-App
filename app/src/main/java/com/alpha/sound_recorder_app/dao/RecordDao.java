@@ -17,20 +17,25 @@ public class RecordDao {
 
     public RecordDao(Db db){
         this.db = db;
-        dbRead = db.getReadableDatabase();
         dbWrite = db.getWritableDatabase();
-
+        dbRead = db.getReadableDatabase();
     }
 
-    public void clearRecord(){
-        dbWrite.delete("user",null,null);
+    public void clearRecord() {
+        dbWrite.delete("record",null,null);
     }
 
     public boolean addRecord(Record record){
         ContentValues cv = new ContentValues();
 //        cv.put("_id",user.get_id());
         cv.put("name",record.getName());
-        long flag = dbWrite.insert("record",null,cv);
+        long flag = 0;
+        try{
+            flag = dbWrite.insert("record",null,cv);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+//        long flag = dbWrite.insert("record",null,cv);
         return flag == 1;
     }
 
@@ -41,18 +46,24 @@ public class RecordDao {
     }
 
     public Cursor getAllRecord(){
-        return dbRead.query("record",null,null,null,null,null,null);
+//        Cursor cursor = dbRead.query("record", null, null, null, null, null, null);
+//        return cursor;
+        return dbRead.query("record", null, null, null, null, null, null);
     }
 
     public void close(){
-        if(dbWrite.isOpen()){
+        if(dbWrite != null && dbWrite.isOpen()){
             dbWrite.close();
         }
-        if(dbRead.isOpen()){
+        if(dbRead != null && dbRead.isOpen()){
             dbRead.close();
         }
-        if(!cursor.isClosed()){
-            cursor.close();
+//        if(!cursor.isClosed()){
+//            cursor.close();
+//        }
+
+        if(db != null){
+            db.close();
         }
     }
 

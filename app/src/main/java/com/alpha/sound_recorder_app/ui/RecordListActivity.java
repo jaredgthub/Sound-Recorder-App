@@ -27,27 +27,15 @@ public class RecordListActivity extends ListActivity {
     private SimpleCursorAdapter adapter;
     private Db db;
     private RecordDao recordDao;
-    private String fileLocation;
+    private String fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_list);
-        db = new Db(this);
-        recordDao = new RecordDao(db);
 
-        //检测是否存在SD卡
-        if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-            //设置sdcard的路径
-            fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
-//            fileName += "/hello.3gp";
-            // 更新所有录音到数据库中
-            updateRecordList();
-        } else{
-            Toast.makeText(RecordListActivity.this, "without SD card! ", Toast.LENGTH_LONG).show();
-        }
-
-
+        // 更新所有录音到数据库中
+        updateRecordList();
 
         adapter = new SimpleCursorAdapter(this,R.layout.record_list_item,null,new String[]{"_id","name"},new int[]{R.id.idItem,R.id.nameItem});
         setListAdapter(adapter);
@@ -58,15 +46,20 @@ public class RecordListActivity extends ListActivity {
 
                 new AlertDialog.Builder(RecordListActivity.this).setTitle("alert").setMessage("are you sure del?")
                         .setPositiveButton("sure", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Cursor c = adapter.getCursor();
-                        c.moveToPosition(position);
-                        int itemId = c.getInt(c.getColumnIndex("_id"));
-                        recordDao.delRecord(itemId);
-                        refreshListView();
-                    }
-                }).setNegativeButton("cancel",null).show();
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db = new Db(RecordListActivity.this);
+                                recordDao = new RecordDao(db);
+
+                                Cursor c = adapter.getCursor();
+                                c.moveToPosition(position);
+                                int itemId = c.getInt(c.getColumnIndex("_id"));
+                                recordDao.delRecord(itemId);
+                                recordDao.close();
+
+                                refreshListView();
+                            }
+                        }).setNegativeButton("cancel", null).show();
                 //此次长按有效，返回true
                 return true;
             }
@@ -75,7 +68,10 @@ public class RecordListActivity extends ListActivity {
     }
 
     public void refreshListView(){
+        db = new Db(this);
+        recordDao = new RecordDao(db);
         adapter.changeCursor(recordDao.getAllRecord());
+        recordDao.close();
     }
 
     @Override
@@ -107,6 +103,9 @@ public class RecordListActivity extends ListActivity {
         //扫描文件夹下的所有录音文件(扫描后缀，不扫描前缀)，并将数据写入数据库。
         // 取得指定位置的文件设置显示到播放列表
         //清空数据库中record的记录
+        db = new Db(this);
+        recordDao = new RecordDao(db);
+
         recordDao.clearRecord();
         File rootPath = new File(fileLocation);
         if (rootPath.listFiles(new RecordFilter()).length > 0){
@@ -115,10 +114,10 @@ public class RecordListActivity extends ListActivity {
                 record.setName(file.getName());
                 record.setRecordFile(file);
 //                record.setCreateTime(file.ge);
-                //mMusicList.add(file.getName());
                 recordDao.addRecord(record);
             }
         }
+        recordDao.close();
     }
 
     class RecordFilter implements FilenameFilter {
