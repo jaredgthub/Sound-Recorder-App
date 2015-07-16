@@ -18,13 +18,14 @@ public class Db extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE user(" +
-//                "_id int NOT NULL PRIMARY KEY," +
-                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "_id INTEGER NOT NULL PRIMARY KEY," +
+//                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "username varchar(32) DEFAULT 'visitor'," +
                 "password varchar(32)) ");
 
         db.execSQL("CREATE TABLE record(" +
-                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "_id INTEGER NOT NULL PRIMARY KEY," +
+//                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "name varchar(32)," +
                 "createTime timestamp," +
                 "maxTime INTEGER," +

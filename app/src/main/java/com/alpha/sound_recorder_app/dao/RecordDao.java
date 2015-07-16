@@ -26,8 +26,15 @@ public class RecordDao {
     }
 
     public boolean addRecord(Record record){
+
+        Cursor cursor = getAllRecord();
+        int _id = 0;
+        if(cursor.getCount() > 0){
+            cursor.moveToLast();
+            _id = cursor.getInt(cursor.getColumnIndex("_id"));
+        }
         ContentValues cv = new ContentValues();
-//        cv.put("_id",user.get_id());
+        cv.put("_id",_id + 1);
         cv.put("name",record.getName());
         long flag = 0;
         try{
@@ -46,9 +53,7 @@ public class RecordDao {
     }
 
     public Cursor getAllRecord(){
-//        Cursor cursor = dbRead.query("record", null, null, null, null, null, null);
-//        return cursor;
-        return dbRead.query("record", null, null, null, null, null, null);
+        return dbRead.query("record", null, null, null, null, null, "createTime desc");
     }
 
     public void close(){

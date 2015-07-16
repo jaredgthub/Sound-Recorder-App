@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.Db;
