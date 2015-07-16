@@ -22,6 +22,14 @@ public class Db extends SQLiteOpenHelper{
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "username varchar(32) DEFAULT 'visitor'," +
                 "password varchar(32)) ");
+
+        db.execSQL("CREATE TABLE record(" +
+                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "name varchar(32)," +
+                "createTime timestamp," +
+                "maxTime INTEGER," +
+                "type INTEGER" +
+                ")");
     }
 
     @Override
