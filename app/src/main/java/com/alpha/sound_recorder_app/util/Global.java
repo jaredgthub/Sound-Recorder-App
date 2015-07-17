@@ -8,6 +8,6 @@ public class Global {
     /**
      *
      */
-//    public static final String PATH = "/alpha/records/";
-    public static final String PATH = "/";
+    public static final String PATH = "/alpha/records/";
+//    public static final String PATH = "/";
 }

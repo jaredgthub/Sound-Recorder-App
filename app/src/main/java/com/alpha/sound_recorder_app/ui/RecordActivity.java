@@ -20,6 +20,7 @@ import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
 
+import java.io.File;
 import java.io.IOException;
 
 public class RecordActivity extends Activity {
@@ -33,6 +34,7 @@ public class RecordActivity extends Activity {
     private Button stopRecordBtn;
     private Button stopPlayBtn;
     private Button showListBtn;
+    private Button settingsBtn;
 
     //语音操作对象
     private MediaPlayer mPlayer = null;
@@ -52,26 +54,30 @@ public class RecordActivity extends Activity {
         startRecordBtn = (Button)findViewById(R.id.startRecord);
         startRecordBtn.setText(R.string.startRecord);
         //绑定监听器
-        startRecordBtn.setOnClickListener(new startRecordListener());
+        startRecordBtn.setOnClickListener(new StartRecordListener());
 
         //结束录音
         stopRecordBtn = (Button) findViewById(R.id.stopRecord);
         stopRecordBtn.setText(R.string.stopRecord);
-        stopRecordBtn.setOnClickListener(new stopRecordListener());
+        stopRecordBtn.setOnClickListener(new StopRecordListener());
 
         //开始播放
         startPlayBtn = (Button) findViewById(R.id.startPlay);
         startPlayBtn.setText(R.string.startPlay);
-        startPlayBtn.setOnClickListener(new startPlayListener());
+        startPlayBtn.setOnClickListener(new StartPlayListener());
 
         //结束播放
         stopPlayBtn = (Button) findViewById(R.id.stopPlay);
         stopPlayBtn.setText(R.string.stopPlay);
-        stopPlayBtn.setOnClickListener(new stopPlayListener());
+        stopPlayBtn.setOnClickListener(new StopPlayListener());
 
         showListBtn = (Button) findViewById(R.id.showList);
         showListBtn.setText(R.string.showList);
-        showListBtn.setOnClickListener(new showListListener());
+        showListBtn.setOnClickListener(new ShowListListener());
+
+        settingsBtn = (Button) findViewById(R.id.settings);
+        settingsBtn.setText(R.string.settings);
+        settingsBtn.setOnClickListener(new SettingsListener());
 
         startRecordBtn.setEnabled(true);
         stopRecordBtn.setEnabled(false);
@@ -90,13 +96,17 @@ public class RecordActivity extends Activity {
     /**
      * start record
      */
-    class startRecordListener implements OnClickListener{
+    class StartRecordListener implements OnClickListener{
         @Override
         public void onClick(View v) {
 
             //设置sdcard的路径
             fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
-
+            //如果Global.PATH不存在，则创建目录
+            File rootLocation = new File(fileLocation);
+            if (!rootLocation.exists()) {
+                rootLocation.mkdirs();
+            }
             mRecorder = new MediaRecorder();
             //设置麦克风
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -131,7 +141,7 @@ public class RecordActivity extends Activity {
     /**
      * stop record
      */
-    class stopRecordListener implements OnClickListener{
+    class StopRecordListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             //save
@@ -152,7 +162,7 @@ public class RecordActivity extends Activity {
     /**
      * start play
      */
-    class startPlayListener implements OnClickListener{
+    class StartPlayListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             mPlayer = new MediaPlayer();
@@ -171,7 +181,7 @@ public class RecordActivity extends Activity {
     /**
      * stop play
      */
-    class stopPlayListener implements OnClickListener{
+    class StopPlayListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             mPlayer.release();
@@ -181,7 +191,7 @@ public class RecordActivity extends Activity {
         }
     }
 
-    class showListListener implements OnClickListener{
+    class ShowListListener implements OnClickListener{
         @Override
         public void onClick(View v) {
             startActivity(new Intent(RecordActivity.this,RecordListActivity.class));
@@ -192,5 +202,12 @@ public class RecordActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         recordDao.close();
+    }
+
+    private class SettingsListener implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(RecordActivity.this,RecordListActivity.class));
+        }
     }
 }

@@ -11,4 +11,6 @@
     <string name="stopPlay">stop Play</string>
     <string name="showList">show Record List</string>
     <string name="title_activity_record_list">RecordList</string>
+    <string name="settings">settings</string>
+
 </resources>
