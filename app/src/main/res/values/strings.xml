@@ -6,6 +6,7 @@
 
     <string name="hello"></string>
     <string name="startRecord">start Record</string>
+    <string name="pauseRcord">pause Record</string>
     <string name="stopRecord">stop Record</string>
     <string name="startPlay">start Play</string>
     <string name="stopPlay">stop Play</string>

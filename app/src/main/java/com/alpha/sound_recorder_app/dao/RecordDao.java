@@ -34,7 +34,7 @@ public class RecordDao {
         Cursor cursor = getAllRecord();
         int _id = 0;
         if(cursor.getCount() > 0){
-            cursor.moveToLast();
+            cursor.moveToFirst();
             _id = cursor.getInt(cursor.getColumnIndex("_id"));
         }
         ContentValues cv = new ContentValues();
@@ -63,7 +63,7 @@ public class RecordDao {
     }
 
     public Cursor getAllRecord(){
-        return dbRead.query("record", null, null, null, null, null, "createTime desc");
+        return dbRead.query("record", null, null, null, null, null, "_id desc");
     }
 
     public void close(){

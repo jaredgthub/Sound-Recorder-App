@@ -22,7 +22,6 @@ import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 
 public class RecordListActivity extends ListActivity {
 
@@ -163,6 +162,12 @@ public class RecordListActivity extends ListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(mPlayer != null){
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+        }
+
         recordDao.close();
     }
 }
