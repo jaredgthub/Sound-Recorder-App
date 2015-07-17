@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.RecordActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +26,11 @@
             android:name=".ui.RecordListActivity"
             android:label="@string/title_activity_record_list" >
         </activity>
-        
-        <!--<activity android:name="."-->
+        <!--<activity-->
+            <!--android:name=".ui.MainActivity"-->
+            <!--android:label="@string/title_activity_record_list" >-->
+        <!--</activity>-->
+
 
     </application>
 
