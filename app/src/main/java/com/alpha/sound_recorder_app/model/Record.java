@@ -97,10 +97,8 @@ public class Record {
     //临时文件
     private File tempFile;
 
-    /** 记录需要合成的几段语音文件 **/
+    // 记录需要合成的几段语音文件
     private ArrayList<String> list;
-    // 计算文件大小（单位：KB)
-    private String length;
 
     //是否处于暂时状态
     private boolean isPause;
@@ -152,31 +150,35 @@ public class Record {
         } catch (Exception e) {
             System.out.println("prepare() or start() failed");
         }
-        isPause = true;
+        isPause = false;
     }
 
     public void stopRecord(){
-        timer.cancel();
-        if(isPause){
+        //如果没有暂停，即正在录制，则停止此段录音，并add list
+        if(!isPause){
+            timer.cancel();
             if(mRecorder != null){
                 mRecorder.stop();
                 mRecorder.release();
                 mRecorder = null;
             }
+            list.add(tempFile.getName());
             isPause = false;
-        }else {
-            //如果不是暂停，则合并文件
-            getInputCollection();
         }
+        getInputCollection();
     }
-
 
     /**
      * 暂停录音
      */
     public void onPause() {
         isPause = true;
-        stopRecord();
+        timer.cancel();
+        if(mRecorder != null){
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        }
         list.add(tempFile.getName());
     }
 
@@ -184,7 +186,6 @@ public class Record {
      * 合并临时文件
      */
     public void getInputCollection() {
-        System.out.println("begin merge!");
         // 创建音频文件,合并的文件放这里
         recordFile = new File(Global.PATH + getName());
         FileOutputStream fileOutputStream = null;
@@ -203,7 +204,6 @@ public class Record {
             e.printStackTrace();
         }
         // list里面为暂停录音 所产生的 几段录音文件的名字，中间几段文件的减去前面的6个字节头文件
-
         for (int i = 0; i < list.size(); i++) {
             File file = new File(Global.PATH + (String) list.get(i));
             try {
@@ -227,12 +227,9 @@ public class Record {
 
                 fileOutputStream.flush();
                 fileInputStream.close();
-                System.out.println("合成文件长度：" + recordFile.length());
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
         // 结束后关闭流
         try {
@@ -252,10 +249,9 @@ public class Record {
             File file = new File(Global.PATH + (String) list.get(i));
             if (file.exists()) {
                 file.delete();
-                System.out.println("delete file :" + file.getName());
             }
         }
-        
+        list = null;
     }
 
     //标记是否已经上传

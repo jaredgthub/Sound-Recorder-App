@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

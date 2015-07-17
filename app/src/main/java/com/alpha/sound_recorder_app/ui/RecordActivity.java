@@ -21,9 +21,6 @@ import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
 
-import java.io.File;
-import java.io.IOException;
-
 public class RecordActivity extends Activity {
 
     //语音文件保存路径
@@ -141,7 +138,18 @@ public class RecordActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(record != null){
+            record.stopRecord();
+            //save
+            if(recordDao.addRecord(record)){
+                Toast.makeText(RecordActivity.this, "save success! ", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(RecordActivity.this, "save fail!", Toast.LENGTH_LONG).show();
+            }
+            record = null;
+        }
         recordDao.close();
+        recordDao = null;
     }
 
     private class SettingsListener implements OnClickListener {
