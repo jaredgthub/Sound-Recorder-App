@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
@@ -55,7 +54,7 @@ public class RecordDao {
 
         while(cursor.moveToNext()){
             String name = cursor.getString(cursor.getColumnIndex("name"));
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH + name);
+            File file = new File(Global.PATH + name);
             file.delete();
         }
         int flag = dbWrite.delete("record","_id=?",new String[]{_id+""});

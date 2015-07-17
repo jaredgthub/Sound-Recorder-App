@@ -28,7 +28,6 @@ public class RecordListActivity extends ListActivity {
     private SimpleCursorAdapter adapter;
     private Db db;
     private RecordDao recordDao;
-    private String fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
 
     private MediaPlayer mPlayer = null;
 
@@ -82,7 +81,7 @@ public class RecordListActivity extends ListActivity {
                 }
                 mPlayer = new MediaPlayer();
                 try{
-                    mPlayer.setDataSource(fileLocation + fileName);
+                    mPlayer.setDataSource(Global.PATH + fileName);
                     mPlayer.prepare();
                     mPlayer.start();
                 } catch(Exception e){
@@ -140,7 +139,7 @@ public class RecordListActivity extends ListActivity {
         // 取得指定位置的文件设置显示到播放列表
 
         recordDao.clearRecord();
-        File rootPath = new File(fileLocation);
+        File rootPath = new File(Global.PATH);
         if (rootPath.listFiles(new RecordFilter()).length > 0){
             for (File file : rootPath.listFiles(new RecordFilter())){
                 Record record = new Record();
@@ -154,8 +153,8 @@ public class RecordListActivity extends ListActivity {
 
     class RecordFilter implements FilenameFilter {
         public boolean accept(File dir, String name){
-//            return (name.endsWith(".amr"));
-            return (name.endsWith(".3gp"));
+            return (name.endsWith(".amr"));
+//            return (name.endsWith(".3gp"));
         }
     }
 
