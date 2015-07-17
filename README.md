@@ -2,4 +2,8 @@
 
 Huang Shi He, Nick, Nicholas, Jared, Heidi. 
 
-test
+
+Nicholas mail : ta@et.esiea.fr
+Nick mail : 653077153@qq.com
+Heidi mail: 1165154614@qq.com
+hungshihe mail:  291996978@qq.com
