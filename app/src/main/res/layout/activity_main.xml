@@ -41,10 +41,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="45dp" />
 
-    <Chronometer
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/showTime"
+        android:id="@+id/showTimeTV"
         android:textSize="50sp"
         android:textAlignment="center"
         android:textColor="#ffffc612"
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/stopRecordBtn"
         android:background="@xml/pressedbuttonfinish"
-        android:layout_below="@+id/showTime"
+        android:layout_below="@id/showTimeTV"
         android:layout_above="@+id/startRecordBtn"
         android:layout_alignRight="@id/startRecordBtn"
         android:layout_alignEnd="@id/startRecordBtn" />

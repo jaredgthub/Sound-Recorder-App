@@ -107,7 +107,7 @@ public class Record {
     private MediaRecorder mRecorder = null;
 
     public String getTime(){
-        return minute + " minute " + second + " second";
+        return minute + ":" + second;
     }
 
     public void startRecord(){
@@ -137,8 +137,6 @@ public class Record {
          * THREE_GPP(3gp格式，H263视频/ARM音频编码)、MPEG-4、RAW_AMR(只支持音频且音频编码要求为AMR_NB)
          */
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
-
-//        mRecorder.setOutputFile(Global.PATH + getName());
         tempFile = new File(Global.PATH + Global.getTime() + ".amr");
         mRecorder.setOutputFile(tempFile.getAbsolutePath());
 
@@ -220,11 +218,9 @@ public class Record {
                 // 之后的文件，去掉头文件就可以了
                 else {
                     while (fileInputStream.read(myByte) != -1) {
-
                         fileOutputStream.write(myByte, 6, length - 6);
                     }
                 }
-
                 fileOutputStream.flush();
                 fileInputStream.close();
             } catch (Exception e) {

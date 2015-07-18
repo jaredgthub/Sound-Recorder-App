@@ -6,12 +6,12 @@ package com.alpha.sound_recorder_app.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,29 +19,34 @@ import android.widget.Toast;
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.Record;
-import com.alpha.sound_recorder_app.util.Global;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
-    //语音文件保存路径
-    private String fileLocation;
-
     //界面控件
     private Button startRecordBtn;
-    private Button pauseRecordBtn;
-    //    private Button startPlayBtn;
     private Button stopRecordBtn;
-    //    private Button stopPlayBtn;
     private Button showListBtn;
     private Button settingsBtn;
+    private Timer timer = new Timer();
 
-    private TextView showTimeTv;
+    private TextView showTimeTV;
 
     //语音操作对象
-    private MediaPlayer mPlayer = null;
-    private MediaRecorder mRecorder = null;
     private RecordDao recordDao;
     private Record record;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            if(record != null){
+                showTimeTV.setText(record.getTime());
+            }
+        }
+    };
 
     /** Called when the activity is first created. */
     @Override
@@ -49,18 +54,67 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recordDao = new RecordDao(this);
-
+        showTimeTV = (TextView) findViewById(R.id.showTimeTV);
+        showTimeTV.setText("00:00");
 
         //检测是否存在SD卡
-        if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-            fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
-        } else{
+        if (!Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
             Toast.makeText(MainActivity.this, "without SD card! ", Toast.LENGTH_LONG).show();
         }
 
-    }
+        recordDao = new RecordDao(this);
 
+        startRecordBtn = (Button) findViewById(R.id.startRecordBtn);
+        startRecordBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        if(record == null){
+                            record = new Record();
+                        }
+                        record.startRecord();
+                        setTimerTask();
+
+                        stopRecordBtn.setEnabled(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        record.onPause();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        stopRecordBtn = (Button) findViewById(R.id.stopRecordBtn);
+        stopRecordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                record.stopRecord();
+                showTimeTV.setText(record.getTime());
+                //save
+                if(recordDao.addRecord(record)){
+                    Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(MainActivity.this, "save fail!", Toast.LENGTH_LONG).show();
+                }
+                record = null;
+                showTimeTV.setText("00:00");
+                stopRecordBtn.setEnabled(false);
+                startActivity(new Intent(MainActivity.this,RecordListActivity.class));
+            }
+        });
+        stopRecordBtn.setEnabled(false);
+
+        showListBtn = (Button) findViewById(R.id.showListBtn);
+        showListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimeTV.setText("00:00");
+                startActivity(new Intent(MainActivity.this, RecordListActivity.class));
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {
@@ -79,6 +133,14 @@ public class MainActivity extends Activity {
         recordDao = null;
     }
 
-
+    private void setTimerTask(){
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                Message message = new Message();
+                handler.sendMessage(message);
+            }
+        }, 0, 1000);
+    }
 
 }
