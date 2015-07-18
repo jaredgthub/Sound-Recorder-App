@@ -114,6 +114,15 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this, RecordListActivity.class));
             }
         });
+
+        settingsBtn = (Button) findViewById(R.id.settingsBtn);
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+            }
+        });
     }
 
     @Override

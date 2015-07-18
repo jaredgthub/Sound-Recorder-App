@@ -99,8 +99,6 @@ public class RecordListActivity extends ListActivity {
             }
         });
 
-
-
         refreshListView();
     }
 
