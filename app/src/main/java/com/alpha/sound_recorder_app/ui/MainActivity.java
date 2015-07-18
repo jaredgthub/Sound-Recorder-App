@@ -1,42 +1,84 @@
 package com.alpha.sound_recorder_app.ui;
 
-import android.support.v7.app.ActionBarActivity;
+/**
+ * Created by huangshihe on 2015/7/14.
+ */
+
+import android.app.Activity;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Environment;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
-import com.alpha.sound_recorder_app.dao.Db;
-import com.alpha.sound_recorder_app.dao.UserDao;
+import com.alpha.sound_recorder_app.dao.RecordDao;
+import com.alpha.sound_recorder_app.model.Record;
+import com.alpha.sound_recorder_app.util.Global;
 
+public class MainActivity extends Activity {
 
-public class MainActivity extends ActionBarActivity {
+    //语音文件保存路径
+    private String fileLocation;
 
+    //界面控件
+    private Button startRecordBtn;
+    private Button pauseRecordBtn;
+    //    private Button startPlayBtn;
+    private Button stopRecordBtn;
+    //    private Button stopPlayBtn;
+    private Button showListBtn;
+    private Button settingsBtn;
+
+    private TextView showTimeTv;
+
+    //语音操作对象
+    private MediaPlayer mPlayer = null;
+    private MediaRecorder mRecorder = null;
+    private RecordDao recordDao;
+    private Record record;
+
+    /** Called when the activity is first created. */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        recordDao = new RecordDao(this);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //检测是否存在SD卡
+        if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+            fileLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.PATH;
+        } else{
+            Toast.makeText(MainActivity.this, "without SD card! ", Toast.LENGTH_LONG).show();
         }
 
-        return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(record != null){
+            record.stopRecord();
+            //save
+            if(recordDao.addRecord(record)){
+                Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(MainActivity.this, "save fail!", Toast.LENGTH_LONG).show();
+            }
+            record = null;
+        }
+        recordDao.close();
+        recordDao = null;
+    }
+
+
+
 }

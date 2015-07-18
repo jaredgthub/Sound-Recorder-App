@@ -11,17 +11,17 @@
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/button2"
+        android:id="@+id/shareBtn"
         android:typeface="serif"
         android:background="@xml/pressedbuttonprofile"
-        android:layout_alignTop="@+id/button3"
+        android:layout_alignTop="@+id/showListBtn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/button3"
+        android:id="@+id/showListBtn"
         android:typeface="serif"
         android:background="@xml/pressedbuttonfile"
         android:layout_alignParentBottom="true"
@@ -31,20 +31,20 @@
     <Button
         android:layout_width="164dp"
         android:layout_height="218.5dp"
-        android:id="@+id/mainButton"
+        android:id="@+id/startRecordBtn"
         android:typeface="serif"
         android:background="@xml/pressedbutton"
         android:layout_gravity="center"
         android:nestedScrollingEnabled="false"
         android:longClickable="true"
-        android:layout_above="@+id/button2"
+        android:layout_above="@+id/shareBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="45dp" />
 
     <Chronometer
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timer"
+        android:id="@+id/showTime"
         android:textSize="50sp"
         android:textAlignment="center"
         android:textColor="#ffffc612"
@@ -54,16 +54,17 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/stopRecordBtn"
         android:background="@xml/pressedbuttonfinish"
-        android:layout_above="@+id/mainButton"
-        android:layout_alignRight="@+id/mainButton"
-        android:layout_alignEnd="@+id/mainButton" />
+        android:layout_below="@+id/showTime"
+        android:layout_above="@+id/startRecordBtn"
+        android:layout_alignRight="@id/startRecordBtn"
+        android:layout_alignEnd="@id/startRecordBtn" />
 
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/button4"
+        android:id="@+id/settingsBtn"
         android:typeface="serif"
         android:background="@xml/pressedbuttonsettings"
         android:layout_alignParentTop="true"
