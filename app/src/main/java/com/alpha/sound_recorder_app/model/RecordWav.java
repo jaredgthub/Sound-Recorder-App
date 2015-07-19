@@ -25,7 +25,7 @@ public class RecordWav implements BaseRecord {
     private int _id;
     private String name;
     private Date createTime;
-    private int maxTime;
+    private long length;
     private int type = Global.TYPE_WAV;
     private File recordFile;
 
@@ -100,6 +100,9 @@ public class RecordWav implements BaseRecord {
         timer.cancel();
         isStop = true;
         close();
+        setCreateTime(new Date());
+        //TODO 取到的recordFile.length==0？第一次有时可以成功
+//        setLength(recordFile.length());
     }
 
     @Override
@@ -135,11 +138,39 @@ public class RecordWav implements BaseRecord {
         this.recordFile = recordFile;
     }
 
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        if(createTime == null){
+            createTime = new Date();
+        }
+        return createTime;
+    }
+
+    @Override
+    public long getLength() {
+        return length;
+    }
+
+    @Override
+    public void setLength(long length) {
+        this.length = length;
+    }
+
     class AudioRecordThread implements Runnable {
         @Override
         public void run() {
-            writeDateTOFile();//往文件中写入裸数据
-            copyWaveFile(tempAudioName, Global.PATH + getName());//给裸数据加上头文件
+            //往文件中写入裸数据
+            writeDateTOFile();
+            if(recordFile == null){
+                recordFile = new File(Global.PATH + getName());
+            }
+            //给裸数据加上头文件
+            copyWaveFile(tempAudioName, recordFile.getAbsolutePath());
         }
     }
 

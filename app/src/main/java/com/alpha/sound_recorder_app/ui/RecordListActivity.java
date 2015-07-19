@@ -22,6 +22,7 @@ import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Date;
 
 public class RecordListActivity extends ListActivity {
 
@@ -38,7 +39,7 @@ public class RecordListActivity extends ListActivity {
 
         recordDao = new RecordDao(this);
 
-        adapter = new SimpleCursorAdapter(this,R.layout.record_list_item,null,new String[]{"_id","name"},new int[]{R.id.idItem,R.id.nameItem});
+        adapter = new SimpleCursorAdapter(this,R.layout.record_list_item,null,new String[]{"_id","name","createTime","length"},new int[]{R.id._idItem,R.id.nameItem,R.id.createTimeItem,R.id.lengthItem});
         setListAdapter(adapter);
         //长按
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -143,7 +144,8 @@ public class RecordListActivity extends ListActivity {
                 BaseRecord record = new RecordAwr();
                 record.setName(file.getName());
                 record.setRecordFile(file);
-//                record.setCreateTime(file.ge);
+                record.setCreateTime(new Date(file.lastModified()));
+                record.setLength(file.length());
                 recordDao.addRecord(record);
             }
         }
@@ -152,7 +154,6 @@ public class RecordListActivity extends ListActivity {
     class RecordFilter implements FilenameFilter {
         public boolean accept(File dir, String name){
             return (name.endsWith(".amr") || name.endsWith(".wav"));
-//            return (name.endsWith(".3gp"));
         }
     }
 

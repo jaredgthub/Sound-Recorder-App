@@ -9,6 +9,8 @@ import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by huangshihe on 2015/7/16.
@@ -17,6 +19,7 @@ public class RecordDao {
     private Db db;
     private SQLiteDatabase dbRead;
     private SQLiteDatabase dbWrite;
+    Format simpleFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public RecordDao(Context context){
         this.db = new Db(context);
@@ -38,7 +41,13 @@ public class RecordDao {
         }
         ContentValues cv = new ContentValues();
         cv.put("_id",_id + 1);
-        cv.put("name",record.getName());
+        cv.put("name", record.getName());
+        cv.put("createTime", simpleFormat.format(record.getCreateTime()));
+//        File file = new File(Global.PATH + record.getName());
+//        System.out.println("changdu::"+file.length());
+//        cv.put("length",file.length());
+        cv.put("length",record.getLength());
+
         long flag = 0;
         try{
             flag = dbWrite.insert("record",null,cv);

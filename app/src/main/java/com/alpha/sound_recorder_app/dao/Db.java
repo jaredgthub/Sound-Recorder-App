@@ -27,9 +27,8 @@ public class Db extends SQLiteOpenHelper{
                 "_id INTEGER NOT NULL PRIMARY KEY," +
 //                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "name varchar(32)," +
-                "createTime timestamp," +
-                "maxTime INTEGER," +
-                "type INTEGER" +
+                "createTime char(10)," +
+                "length INTEGER" +
                 ")");
     }
 

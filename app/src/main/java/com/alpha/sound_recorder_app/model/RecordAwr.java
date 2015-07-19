@@ -56,12 +56,12 @@ public class RecordAwr implements BaseRecord{
         this.createTime = createTime;
     }
 
-    public int getMaxTime() {
-        return maxTime;
+    public long getLength() {
+        return length;
     }
 
-    public void setMaxTime(int maxTime) {
-        this.maxTime = maxTime;
+    public void setLength(long length) {
+        this.length = length;
     }
 
     public int getType() {
@@ -83,7 +83,7 @@ public class RecordAwr implements BaseRecord{
     private int _id;
     private String name;
     private Date createTime;
-    private int maxTime;
+    private long length;
     private int type = Global.TYPE_AWR;
     private File recordFile;
 
@@ -164,6 +164,8 @@ public class RecordAwr implements BaseRecord{
             isPause = false;
         }
         getInputCollection();
+        setLength(recordFile.length());
+        setCreateTime(new Date());
     }
 
     /**
