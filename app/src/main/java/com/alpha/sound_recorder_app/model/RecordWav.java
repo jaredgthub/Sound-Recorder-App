@@ -36,7 +36,7 @@ public class RecordWav implements BaseRecord {
     private Timer timer;
 
     Thread delay = new Thread();
-    long delayTime = 500;
+//    long delayTime = 200;
 
     //AudioName裸音频数据文件
     private static final String tempAudioName = Global.PATH + "alpha.raw";
@@ -155,7 +155,6 @@ public class RecordWav implements BaseRecord {
         int readsize = 0;
         try {
             File file = new File(tempAudioName);
-            //TODO 要连续录制？
             if (file.exists()) {
                 file.delete();
             }

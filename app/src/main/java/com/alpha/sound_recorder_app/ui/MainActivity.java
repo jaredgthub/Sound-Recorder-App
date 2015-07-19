@@ -21,7 +21,9 @@ import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.model.RecordAwr;
 import com.alpha.sound_recorder_app.model.RecordWav;
+import com.alpha.sound_recorder_app.util.Global;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,6 +64,11 @@ public class MainActivity extends Activity {
         //检测是否存在SD卡
         if (!Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
             Toast.makeText(MainActivity.this, "without SD card! ", Toast.LENGTH_LONG).show();
+        }else{
+            File rootLocation = new File(Global.PATH);
+            if (!rootLocation.exists()) {
+                rootLocation.mkdirs();
+            }
         }
 
         recordDao = new RecordDao(this);
