@@ -163,7 +163,6 @@ public class RecordWav implements BaseRecord {
             e.printStackTrace();
         }
         while (isStop == false) {
-
             readsize = audioRecord.read(audiodata, 0, bufferSizeInBytes);
             if (AudioRecord.ERROR_INVALID_OPERATION != readsize) {
                 if(isPause == false) {
@@ -183,7 +182,9 @@ public class RecordWav implements BaseRecord {
         }
     }
 
-    // 这里得到可播放的音频文件
+    /**
+     * 这里得到可播放的音频文件
+     */
     private void copyWaveFile(String inFilename, String outFilename) {
         FileInputStream in = null;
         FileOutputStream out = null;

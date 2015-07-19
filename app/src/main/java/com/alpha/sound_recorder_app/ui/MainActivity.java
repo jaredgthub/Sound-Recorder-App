@@ -5,7 +5,9 @@ package com.alpha.sound_recorder_app.ui;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -42,6 +44,8 @@ public class MainActivity extends Activity {
     private RecordDao recordDao;
     private BaseRecord record;
 
+    SharedPreferences settings;
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg){
@@ -71,6 +75,7 @@ public class MainActivity extends Activity {
             }
         }
 
+        settings = getSharedPreferences("com.alpha.sound_recorder_app_preferences", Context.MODE_PRIVATE);
         recordDao = new RecordDao(this);
 
         startRecordBtn = (Button) findViewById(R.id.startRecordBtn);
@@ -80,9 +85,16 @@ public class MainActivity extends Activity {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         if(record == null){
-                            //TODO add settings!
-//                            record = new RecordAwr();
-                            record = new RecordWav();
+                            switch (settings.getString("example_list",""+Global.TYPE_AWR)){
+                                case ""+Global.TYPE_AWR:
+                                    record = new RecordAwr();
+                                    break;
+                                case ""+Global.TYPE_WAV:
+                                    record = new RecordWav();
+                                    break;
+                                default:
+                                    record = new RecordAwr();
+                            }
                         }
                         record.startRecord();
                         setTimerTask();
