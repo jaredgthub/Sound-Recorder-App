@@ -27,6 +27,7 @@
         </activity>
         <!-- <activity -->
         <!-- android:name=".ui.MainActivity" -->
+        <!-- android:theme="@android:style/Theme.Holo.NoActionBar" -->
         <!-- android:label="@string/title_activity_record_list" > -->
         <!-- </activity> -->
 
@@ -34,6 +35,14 @@
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:theme="@style/AppTheme"
+            android:name=".ui.SearchActivity"
+            android:label="@string/searchword" >
+        </activity>
     </application>
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
 
 </manifest>

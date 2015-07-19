@@ -4,6 +4,7 @@ package com.alpha.sound_recorder_app.ui;
  * Created by huangshihe on 2015/7/14.
  */
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
     private Button stopRecordBtn;
     private Button showListBtn;
     private Button settingsBtn;
+    private Button shareBtn;
     private Timer timer = new Timer();
 
     private TextView showTimeTV;
@@ -56,11 +58,16 @@ public class MainActivity extends Activity {
         }
     };
 
+    private ActionBar bar;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        bar = getActionBar();
+        bar.hide();
 
         showTimeTV = (TextView) findViewById(R.id.showTimeTV);
         showTimeTV.setText("00:00");
@@ -116,15 +123,15 @@ public class MainActivity extends Activity {
                 record.stopRecord();
                 showTimeTV.setText(record.getRecordTime());
                 //save
-                if(recordDao.addRecord(record)){
+                if (recordDao.addRecord(record)) {
                     Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_LONG).show();
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "save fail!", Toast.LENGTH_LONG).show();
                 }
                 record = null;
                 showTimeTV.setText("00:00");
                 stopRecordBtn.setEnabled(false);
-                startActivity(new Intent(MainActivity.this,RecordListActivity.class));
+                startActivity(new Intent(MainActivity.this, RecordListActivity.class));
             }
         });
         stopRecordBtn.setEnabled(false);
@@ -144,6 +151,14 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+            }
+        });
+
+        shareBtn = (Button) findViewById(R.id.shareBtn);
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,SearchActivity.class));
             }
         });
     }

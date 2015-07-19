@@ -72,7 +72,7 @@ public class RecordDao {
     }
 
     public Cursor findRecordByName(String name){
-        return dbRead.query("record",null,"name=?",new String[]{name},null,null,"_id desc");
+        return dbRead.query("record",null,"name like ?",new String[]{"%"+name+"%"},null,null,"_id desc");
     }
 
     public void close(){

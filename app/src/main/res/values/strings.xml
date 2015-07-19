@@ -13,5 +13,9 @@
     <string name="showList">show Record List</string>
     <string name="title_activity_record_list">RecordList</string>
     <string name="settings">settings</string>
+    <string name="action_search">search</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="searchword">please input</string>
 
 </resources>

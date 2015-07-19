@@ -1,5 +1,6 @@
 package com.alpha.sound_recorder_app.ui;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -11,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -104,6 +107,7 @@ public class RecordListActivity extends ListActivity {
 
         refreshListView();
 
+        //播放音乐
         Button playMusicBtn = (Button) findViewById(R.id.play_music);
         playMusicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +117,7 @@ public class RecordListActivity extends ListActivity {
                 }
             }
         });
+
     }
 
     public void refreshListView(){
