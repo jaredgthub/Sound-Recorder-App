@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -75,33 +76,43 @@ public class RecordListActivity extends ListActivity {
                 Cursor cursor = adapter.getCursor();
                 cursor.moveToPosition(position);
                 String fileName = cursor.getString(cursor.getColumnIndex("name"));
-                if(mPlayer != null){
+                if (mPlayer != null) {
                     mPlayer.stop();
                     mPlayer.release();
                     mPlayer = null;
                 }
                 mPlayer = new MediaPlayer();
-                try{
+                try {
                     mPlayer.setDataSource(Global.PATH + fileName);
                     mPlayer.prepare();
-                    mPlayer.start();
-                } catch(Exception e){
+                    //mPlayer.start();
+                } catch (Exception e) {
                     Toast.makeText(RecordListActivity.this, "record file is missing !", Toast.LENGTH_LONG).show();
 
                     new AlertDialog.Builder(RecordListActivity.this).setTitle("you need update List").setMessage("are you sure update?")
-                            .setPositiveButton("sure",new DialogInterface.OnClickListener(){
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        updateRecordList();
-                                        refreshListView();
+                            .setPositiveButton("sure", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            updateRecordList();
+                                            refreshListView();
+                                        }
                                     }
-                                }
                             ).setNegativeButton("cancel", null).show();
                 }
             }
         });
 
         refreshListView();
+
+        Button playMusicBtn = (Button) findViewById(R.id.play_music);
+        playMusicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPlayer != null){
+                    mPlayer.start();
+                }
+            }
+        });
     }
 
     public void refreshListView(){
