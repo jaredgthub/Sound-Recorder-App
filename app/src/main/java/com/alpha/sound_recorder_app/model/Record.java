@@ -17,7 +17,7 @@ import java.util.TimerTask;
 /**
  * Created by huangshihe on 2015/7/15.
  */
-public class Record {
+public class Record implements BaseRecord{
 
     public Record(){
         list = new ArrayList<String>();
@@ -106,7 +106,7 @@ public class Record {
     private MediaPlayer mPlayer = null;
     private MediaRecorder mRecorder = null;
 
-    public String getTime(){
+    public String getRecordTime(){
         return minute + ":" + second;
     }
 

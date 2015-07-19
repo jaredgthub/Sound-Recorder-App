@@ -114,7 +114,7 @@ public class RecordActivity extends Activity {
         @Override
         public void onClick(View v) {
             record.stopRecord();
-            showTimeTv.setText(record.getTime());
+            showTimeTv.setText(record.getRecordTime());
             //save
             if(recordDao.addRecord(record)){
                 Toast.makeText(RecordActivity.this, "save success! ", Toast.LENGTH_LONG).show();

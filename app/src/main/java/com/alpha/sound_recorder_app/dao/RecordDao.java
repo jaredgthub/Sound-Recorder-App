@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
 
@@ -28,7 +29,7 @@ public class RecordDao {
         dbWrite.delete("record",null,null);
     }
 
-    public boolean addRecord(Record record){
+    public boolean addRecord(BaseRecord record){
 
         Cursor cursor = getAllRecord();
         int _id = 0;

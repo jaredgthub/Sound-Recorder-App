@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.RecordDao;
+import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.model.Record;
 
 import java.util.Timer;
@@ -36,14 +37,14 @@ public class MainActivity extends Activity {
 
     //语音操作对象
     private RecordDao recordDao;
-    private Record record;
+    private BaseRecord record;
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg){
             super.handleMessage(msg);
             if(record != null){
-                showTimeTV.setText(record.getTime());
+                showTimeTV.setText(record.getRecordTime());
             }
         }
     };
@@ -91,7 +92,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 record.stopRecord();
-                showTimeTV.setText(record.getTime());
+                showTimeTV.setText(record.getRecordTime());
                 //save
                 if(recordDao.addRecord(record)){
                     Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_LONG).show();
