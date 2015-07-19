@@ -43,9 +43,6 @@ public class RecordDao {
         cv.put("_id",_id + 1);
         cv.put("name", record.getName());
         cv.put("createTime", simpleFormat.format(record.getCreateTime()));
-//        File file = new File(Global.PATH + record.getName());
-//        System.out.println("changdu::"+file.length());
-//        cv.put("length",file.length());
         cv.put("length",record.getLength());
 
         long flag = 0;
@@ -72,6 +69,10 @@ public class RecordDao {
 
     public Cursor getAllRecord(){
         return dbRead.query("record", null, null, null, null, null, "_id desc");
+    }
+
+    public Cursor findRecordByName(String name){
+        return dbRead.query("record",null,"name=?",new String[]{name},null,null,"_id desc");
     }
 
     public void close(){
