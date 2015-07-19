@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.alpha.sound_recorder_app.model.BaseRecord;
-import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;

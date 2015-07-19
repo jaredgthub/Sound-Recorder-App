@@ -15,6 +15,11 @@ public class Global {
     public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/alpha/records/";
 //    public static final String PATH = "/";
 
+    public static final int TYPE_AWR = 1;
+
+    public static final int TYPE_WAV = 0;
+
+
     public static String getTime(){
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.RecordDao;
-import com.alpha.sound_recorder_app.model.Record;
+import com.alpha.sound_recorder_app.model.RecordAwr;
 import com.alpha.sound_recorder_app.util.Global;
 
 public class RecordActivity extends Activity {
@@ -41,7 +41,7 @@ public class RecordActivity extends Activity {
     private MediaPlayer mPlayer = null;
     private MediaRecorder mRecorder = null;
     private RecordDao recordDao;
-    private Record record;
+    private RecordAwr record;
 
     /** Called when the activity is first created. */
     @Override
@@ -97,7 +97,7 @@ public class RecordActivity extends Activity {
         @Override
         public void onClick(View v) {
             if(record == null){
-                record = new Record();
+                record = new RecordAwr();
             }
             record.startRecord();
             showTimeTv.setText("");
@@ -155,7 +155,6 @@ public class RecordActivity extends Activity {
     private class SettingsListener implements OnClickListener {
         @Override
         public void onClick(View v) {
-            //TODO finish settings
 //            startActivity(new Intent(RecordActivity.this,RecordListActivity.class));
         }
     }

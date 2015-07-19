@@ -19,7 +19,8 @@ import android.widget.Toast;
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.BaseRecord;
-import com.alpha.sound_recorder_app.model.Record;
+import com.alpha.sound_recorder_app.model.RecordAwr;
+import com.alpha.sound_recorder_app.model.RecordWav;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -72,7 +73,9 @@ public class MainActivity extends Activity {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         if(record == null){
-                            record = new Record();
+                            //TODO add settings!
+//                            record = new RecordAwr();
+                            record = new RecordWav();
                         }
                         record.startRecord();
                         setTimerTask();

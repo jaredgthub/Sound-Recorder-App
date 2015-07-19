@@ -17,9 +17,9 @@ import java.util.TimerTask;
 /**
  * Created by huangshihe on 2015/7/15.
  */
-public class Record implements BaseRecord{
+public class RecordAwr implements BaseRecord{
 
-    public Record(){
+    public RecordAwr(){
         list = new ArrayList<String>();
         isPause = false;
     }
@@ -84,7 +84,7 @@ public class Record implements BaseRecord{
     private String name;
     private Date createTime;
     private int maxTime;
-    private int type;
+    private int type = Global.TYPE_AWR;
     private File recordFile;
 
     ///////////////////////////////////
@@ -252,5 +252,4 @@ public class Record implements BaseRecord{
 
     //标记是否已经上传
 //    private int state;
-
 }

@@ -16,7 +16,8 @@ import android.widget.Toast;
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.dao.Db;
 import com.alpha.sound_recorder_app.dao.RecordDao;
-import com.alpha.sound_recorder_app.model.Record;
+import com.alpha.sound_recorder_app.model.BaseRecord;
+import com.alpha.sound_recorder_app.model.RecordAwr;
 import com.alpha.sound_recorder_app.util.Global;
 
 import java.io.File;
@@ -139,7 +140,7 @@ public class RecordListActivity extends ListActivity {
         File rootPath = new File(Global.PATH);
         if (rootPath.listFiles(new RecordFilter()).length > 0){
             for (File file : rootPath.listFiles(new RecordFilter())){
-                Record record = new Record();
+                BaseRecord record = new RecordAwr();
                 record.setName(file.getName());
                 record.setRecordFile(file);
 //                record.setCreateTime(file.ge);
@@ -150,7 +151,7 @@ public class RecordListActivity extends ListActivity {
 
     class RecordFilter implements FilenameFilter {
         public boolean accept(File dir, String name){
-            return (name.endsWith(".amr"));
+            return (name.endsWith(".amr") || name.endsWith(".wav"));
 //            return (name.endsWith(".3gp"));
         }
     }
