@@ -53,7 +53,6 @@ public class UserDao {
         ContentValues cv = new ContentValues();
 //        cv.put("_id",user.get_id());
         cv.put("username",user.getUsername());
-        cv.put("password",user.getPassword());
         long flag = dbWrite.insert("user",null,cv);
         return flag == 1;
     }

@@ -17,5 +17,6 @@
     <string name="title_activity_test">Test</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="searchword">please input</string>
+    <string name="title_activity_share">ShareActivity</string>
 
 </resources>

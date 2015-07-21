@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/share_temp_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickOAuthBtn"
+        android:text="Baidu OAuth"
+        />
+
+    <TextView
+        android:id="@+id/tv_access_token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_get_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickGetUserInfo"
+        android:text="Get User Info"
+        />
+
+    <TextView
+        android:id="@+id/tv_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="loading you message..."
+        />
+
+    <Button
+        android:id="@+id/btn_shareto_sinaweibo"
+        android:text="Share to sina weibo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
