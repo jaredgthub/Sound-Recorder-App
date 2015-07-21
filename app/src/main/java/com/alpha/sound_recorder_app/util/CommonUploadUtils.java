@@ -32,20 +32,16 @@ public class CommonUploadUtils {
     public void runUpload() {
         new MyUploadRunnalbe().run();
     }
+
     class MyUploadRunnalbe implements Runnable {
         public void run() {
             try {
                 String tString = Environment.getExternalStorageDirectory().getAbsolutePath() + "/alpha/records/";
                 f = new File(tString + "test.txt");
-                System.out.println("test begin...");
                 if(!f.exists()){
                     f.createNewFile();
-                    System.out.println("1111111");
-                }else{
-                    System.out.println("2222222");
                 }
             } catch (IOException e) {
-                System.out.println("3333333");
                 e.printStackTrace();
             }
             //上传文件的名字hsh

@@ -55,11 +55,6 @@
             android:name=".ui.RecordListActivity"
             android:label="@string/title_activity_record_list" >
         </activity>
-        <!-- <activity -->
-        <!-- android:name=".ui.MainActivity" -->
-        <!-- android:theme="@android:style/Theme.Holo.NoActionBar" -->
-        <!-- android:label="@string/title_activity_record_list" > -->
-        <!-- </activity> -->
 
         <activity
             android:name=".ui.SettingsActivity"

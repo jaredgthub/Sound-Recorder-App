@@ -17,7 +17,6 @@ public final class QiNiuConfig {
     public static final String QINIU_BUCKNAME = "forxyz";
 
     public static String getToken() {
-
         Mac mac = new Mac(QiNiuConfig.QINIU_AK, QiNiuConfig.QINIU_SK);
         PutPolicy putPolicy = new PutPolicy(QiNiuConfig.QINIU_BUCKNAME);
         putPolicy.returnBody = "{\"name\": $(fname),\"size\": \"$(fsize)\",\"w\": \"$(imageInfo.width)\",\"h\": \"$(imageInfo.height)\",\"key\":$(etag)}";

@@ -35,4 +35,5 @@ dependencies {
     compile files('libs/android-async-http-1.4.6.jar')
     compile files('libs/httpmime-4.2.6.jar')
     compile files('libs/qiniu-android-sdk-7.0.1.jar')
+    compile files('libs/qiniu-java-sdk-7.0.1.jar')
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.model.User;
 import com.alpha.sound_recorder_app.util.CommonUploadUtils;
+import com.alpha.sound_recorder_app.util.DownloadUtil;
 import com.baidu.api.AsyncBaiduRunner;
 import com.baidu.api.Baidu;
 import com.baidu.api.BaiduDialog;
@@ -75,8 +76,8 @@ public class ShareActivity extends Activity {
 //        mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
             mImageContent.setTitle("alpha sound recorder app");
             mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
-            //分享的链接地址，应该为录音的存储位置
-            mImageContent.setLinkUrl("http://forxyz.coding.io");
+            //分享的链接地址，应该为录音的存储位置(不能用空格)
+            mImageContent.setLinkUrl(DownloadUtil.getUrl("vivoE3__1437466540851__17962_9684.jpg"));
         }else{
             System.out.println("error in init");
             Toast.makeText(ShareActivity.this, "init error!", Toast.LENGTH_LONG).show();
