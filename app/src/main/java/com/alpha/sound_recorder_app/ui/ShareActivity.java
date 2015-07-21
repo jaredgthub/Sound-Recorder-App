@@ -1,17 +1,22 @@
 package com.alpha.sound_recorder_app.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
 import com.alpha.sound_recorder_app.model.User;
+import com.alpha.sound_recorder_app.util.CommonUploadUtils;
 import com.baidu.api.AsyncBaiduRunner;
 import com.baidu.api.Baidu;
 import com.baidu.api.BaiduDialog;
@@ -19,10 +24,9 @@ import com.baidu.api.BaiduDialogError;
 import com.baidu.api.BaiduException;
 import com.baidu.frontia.Frontia;
 import com.baidu.frontia.api.FrontiaAuthorization;
+import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
 import com.baidu.frontia.api.FrontiaSocialShare;
 import com.baidu.frontia.api.FrontiaSocialShareContent;
-import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
-
 import com.baidu.frontia.api.FrontiaSocialShareListener;
 import com.google.gson.Gson;
 
@@ -33,17 +37,22 @@ public class ShareActivity extends Activity {
     private TextView mTvAccessToken = null;
     private TextView mTvGetUserInfo = null;
     private Baidu baidu = null;
+    private Button btnUploadtoQiniu = null;
 
     private FrontiaSocialShare mSocialShare;
 
     private FrontiaSocialShareContent mImageContent = new FrontiaSocialShareContent();
 
     private FrontiaAuthorization mAuthorization;
-    private final static String Scope_Basic = "basic";
-
-    private final static String Scope_Netdisk = "netdisk";
 
     private Gson mGson = null;
+
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            Toast.makeText(getApplicationContext(), "success! ", Toast.LENGTH_LONG).show();
+        };
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +77,19 @@ public class ShareActivity extends Activity {
             mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
             //分享的链接地址，应该为录音的存储位置
             mImageContent.setLinkUrl("http://forxyz.coding.io");
-
         }else{
             System.out.println("error in init");
             Toast.makeText(ShareActivity.this, "init error!", Toast.LENGTH_LONG).show();
         }
 
+        //upload
+        btnUploadtoQiniu = (Button) findViewById(R.id.btn_uploadto_qiniu);
+        btnUploadtoQiniu.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CommonUploadUtils(handler).runUpload();
+            }
+        });
     }
 
     public void clickOAuthBtn(View view){
@@ -129,7 +145,7 @@ public class ShareActivity extends Activity {
     }
 
     public void clickShareToSinaweibo(View view){
-        mSocialShare.share(mImageContent,MediaType.BATCHSHARE.toString(),new ShareListener(),true);
+        mSocialShare.share(mImageContent, MediaType.BATCHSHARE.toString(), new ShareListener(), true);
     }
 
     private void refreshUI(final String msg){
@@ -189,7 +205,6 @@ public class ShareActivity extends Activity {
         }
 
     }
-
 
 
 }
