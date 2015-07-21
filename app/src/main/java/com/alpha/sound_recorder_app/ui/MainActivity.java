@@ -170,7 +170,7 @@ public class MainActivity extends Activity {
             record.stopRecord();
             //save
             if(recordDao.addRecord(record)){
-                Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "save success! ", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(MainActivity.this, "save fail!", Toast.LENGTH_LONG).show();
             }

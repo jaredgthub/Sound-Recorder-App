@@ -41,6 +41,8 @@
         android:id="@+id/btn_shareto_sinaweibo"
         android:text="Share to sina weibo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="clickShareToSinaweibo"
+        />
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.alpha.sound_recorder_app.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +17,13 @@ import com.baidu.api.Baidu;
 import com.baidu.api.BaiduDialog;
 import com.baidu.api.BaiduDialogError;
 import com.baidu.api.BaiduException;
+import com.baidu.frontia.Frontia;
 import com.baidu.frontia.api.FrontiaAuthorization;
 import com.baidu.frontia.api.FrontiaSocialShare;
 import com.baidu.frontia.api.FrontiaSocialShareContent;
+import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
+
+import com.baidu.frontia.api.FrontiaSocialShareListener;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -30,7 +35,6 @@ public class ShareActivity extends Activity {
     private Baidu baidu = null;
 
     private FrontiaSocialShare mSocialShare;
-
 
     private FrontiaSocialShareContent mImageContent = new FrontiaSocialShareContent();
 
@@ -48,6 +52,28 @@ public class ShareActivity extends Activity {
         mTvAccessToken = (TextView) findViewById(R.id.tv_access_token);
         mTvGetUserInfo = (TextView) findViewById(R.id.tv_user_info);
         mGson = new Gson();
+
+        //share
+        boolean isInit = Frontia.init(getApplicationContext(), "wBk3HUHSnGPzGw9V43B2UTWz");
+        if(isInit){//Frontia is successfully initialized.
+            //Use Frontia
+            mSocialShare = Frontia.getSocialShare();
+            mSocialShare.setContext(this);
+            mSocialShare.setClientId(MediaType.SINAWEIBO.toString(), "2788353227");
+//        mSocialShare.setClientId(MediaType.QZONE.toString(), "100358052");
+//        mSocialShare.setClientId(MediaType.QQFRIEND.toString(), "100358052");
+//        mSocialShare.setClientName(MediaType.QQFRIEND.toString(), "百度");
+//        mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
+            mImageContent.setTitle("alpha sound recorder app");
+            mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
+            //分享的链接地址，应该为录音的存储位置
+            mImageContent.setLinkUrl("http://forxyz.coding.io");
+
+        }else{
+            System.out.println("error in init");
+            Toast.makeText(ShareActivity.this, "init error!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public void clickOAuthBtn(View view){
@@ -99,27 +125,11 @@ public class ShareActivity extends Activity {
                     refreshUserInfo("onBaiduException");
                 }
             });
-
-            /*new Thread(){
-                public void run() {
-                    String url = "https://openapi.baidu.com/rest/2.0/passport/users/getInfo";
-                    try {
-                        final String jsonText = baidu.request(url,null,"GET");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mTvGetUserInfo.setText(jsonText);
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (BaiduException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();*/
-
         }
+    }
+
+    public void clickShareToSinaweibo(View view){
+        mSocialShare.share(mImageContent,MediaType.BATCHSHARE.toString(),new ShareListener(),true);
     }
 
     private void refreshUI(final String msg){
@@ -160,4 +170,26 @@ public class ShareActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private class ShareListener implements FrontiaSocialShareListener {
+
+        @Override
+        public void onSuccess() {
+            Log.d("Test", "share success");
+        }
+
+        @Override
+        public void onFailure(int errCode, String errMsg) {
+            Log.d("Test","share errCode "+errCode);
+        }
+
+        @Override
+        public void onCancel() {
+            Log.d("Test","cancel ");
+        }
+
+    }
+
+
+
 }
