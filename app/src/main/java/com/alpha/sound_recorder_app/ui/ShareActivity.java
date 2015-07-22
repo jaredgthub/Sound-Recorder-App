@@ -77,7 +77,7 @@ public class ShareActivity extends Activity {
             mImageContent.setTitle("alpha sound recorder app");
             mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
             //分享的链接地址，应该为录音的存储位置(不能用空格)
-            mImageContent.setLinkUrl(DownloadUtil.getUrl("vivoE3__1437466540851__17962_9684.jpg"));
+            mImageContent.setLinkUrl(DownloadUtil.getUrl("1.jpg"));
         }else{
             System.out.println("error in init");
             Toast.makeText(ShareActivity.this, "init error!", Toast.LENGTH_LONG).show();

@@ -6,4 +6,14 @@
         <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
     <!--</style>-->
 
+    <style name="settings_style" parent="@android:style/Theme.Holo.Light">
+        <item name="android:background">@drawable/background3</item>
+        <!--//TODO make better ui.-->
+        <!--<item name="android:actionBarStyle">@style/settings_actionBar</item>-->
+    </style>
+
+    <style name="settings_actionBar" parent="android:Widget.ActionBar">
+        <!--<item name="android:textColor">#fff</item>-->
+    </style>
+
 </resources>

@@ -58,7 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/handle_btnlayout"
-        android:layout_marginBottom="50dp" >
+        android:layout_marginBottom="50dp"
+        android:scrollbars="vertical">
     </ListView>
 
     <RelativeLayout

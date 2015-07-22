@@ -10,7 +10,7 @@ public class DownloadUtil {
     public static String getUrl(String fileName){
         Auth auth = Auth.create(QiNiuConfig.QINIU_AK, QiNiuConfig.QINIU_SK);
 //        String url = "http://forxyz.qiniudn.com/1.jpg";
-        String url = "http://forxyz.qiniudn.com/"+fileName;
+        String url = "http://7xixlo.com1.z0.glb.clouddn.com/"+fileName;
         //指定时长
         return auth.privateDownloadUrl(url, 3600 * 24 * 3);
     }
