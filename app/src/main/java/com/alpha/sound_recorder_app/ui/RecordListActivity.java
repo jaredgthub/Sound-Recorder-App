@@ -15,11 +15,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.SeekBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.alpha.sound_recorder_app.R;
-import com.alpha.sound_recorder_app.dao.Db;
 import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.model.Record;
@@ -29,6 +29,8 @@ import com.alpha.sound_recorder_app.util.Global;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RecordListActivity extends ListActivity {
 
@@ -40,6 +42,15 @@ public class RecordListActivity extends ListActivity {
     private Record record;
     private EditText editText;
     private Menu menu;
+
+    // 是否播放
+    private boolean isPlay;
+    // 互斥变量，防止定时器与SeekBar拖动时进度冲突
+    private boolean isChanging;
+    private SeekBar seekbar;
+
+    private Timer timer;
+    private TimerTask timerTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +90,7 @@ public class RecordListActivity extends ListActivity {
                 Cursor cursor = adapter.getCursor();
                 cursor.moveToPosition(position);
                 String fileName = cursor.getString(cursor.getColumnIndex("name"));
+                isChanging = true;
                 if (mPlayer != null) {
                     mPlayer.stop();
                     mPlayer.release();
@@ -88,7 +100,8 @@ public class RecordListActivity extends ListActivity {
                 try {
                     mPlayer.setDataSource(Global.PATH + fileName);
                     mPlayer.prepare();
-                    //mPlayer.start();
+                    isPlay = false;
+                    playerFinish();
                 } catch (Exception e) {
                     Toast.makeText(RecordListActivity.this, "record file is missing !", Toast.LENGTH_LONG).show();
 
@@ -110,18 +123,69 @@ public class RecordListActivity extends ListActivity {
         refreshListView();
 
         //播放音乐
+        seekbar = (SeekBar) findViewById(R.id.sb_play);
+        seekbar.setOnSeekBarChangeListener(new MySeekbar());
         Button playMusicBtn = (Button) findViewById(R.id.play_music);
         playMusicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mPlayer != null){
-                    mPlayer.start();
+                    //如果是正在播放，则点击即为暂停
+                    if(isPlay){
+                        isPlay = false;
+                        mPlayer.pause();
+                    }else{
+                        //不是正在播放，即点击要进行播放
+                        isPlay = true;
+                        mPlayer.start();
+                        seekbar.setMax(mPlayer.getDuration());
+                        timer = new Timer();
+                        isChanging = false;
+                        timerTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                if(isChanging){
+                                    return;
+                                }else{
+                                    seekbar.setProgress(mPlayer.getCurrentPosition());
+                                }
+                            }
+                        };
+                        timer.schedule(timerTask, 0, 10);
+                        mPlayer.start();
+                    }
                 }
             }
         });
-
         //显示actionbar上的返回
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void playerFinish() {
+        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                isPlay = false;
+                mPlayer.seekTo(0);
+                mPlayer.pause();
+            }
+        });
+    }
+
+    // 进度条处理
+    class MySeekbar implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+        }
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            isChanging = true;
+        }
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mPlayer.seekTo(seekbar.getProgress());
+            isChanging = false;
+        }
     }
 
     public void refreshListView(){
@@ -224,6 +288,8 @@ public class RecordListActivity extends ListActivity {
         }else if(id == android.R.id.home){
             //actionbar上的返回
             if(menu.findItem(R.id.menu_search).isVisible()){
+                //TODO need to test back function!
+                finish();
                 startActivity(new Intent(RecordListActivity.this,MainActivity.class));
             }else{
                 menu.findItem(R.id.menu_rename).setVisible(false);
@@ -273,4 +339,5 @@ public class RecordListActivity extends ListActivity {
 
         recordDao.close();
     }
+
 }

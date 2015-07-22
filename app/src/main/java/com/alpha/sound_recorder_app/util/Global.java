@@ -5,6 +5,8 @@ import android.os.Environment;
 import com.alpha.sound_recorder_app.model.Record;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by huangshihe on 2015/7/16.
@@ -56,6 +58,15 @@ public class Global {
 
     public static String getFileNameWithoutSuffix(String name){
         return name.substring(0,name.lastIndexOf("."));
+    }
+
+    public static String millisecondToDate(String millisecond){
+        long millisecondLong = Long.getLong(millisecond);
+        Date date = new Date(millisecondLong);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("hh:mm:ss");
+        return format.format(gc.getTime());
     }
 
 }

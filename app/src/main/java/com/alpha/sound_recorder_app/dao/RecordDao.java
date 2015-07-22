@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaMetadataRetriever;
 
 import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.util.Global;
@@ -32,6 +33,12 @@ public class RecordDao {
     }
 
     public boolean addRecord(BaseRecord record){
+        //获得文件的时间和大小
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(Global.PATH + record.getName());
+        String length = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//毫秒，String
+        record.setLength(Long.parseLong(length));
+//        String length = Global.millisecondToDate(recordLen);
 
         Cursor cursor = getAllRecord();
         int _id = 0;
