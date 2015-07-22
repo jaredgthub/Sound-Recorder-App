@@ -112,6 +112,7 @@ public class RecordListActivity extends ListActivity {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                seekbar.setVisibility(View.VISIBLE);
                 //播放
                 Cursor cursor = adapter.getCursor();
                 cursor.moveToPosition(position);
@@ -151,12 +152,13 @@ public class RecordListActivity extends ListActivity {
         //播放音乐
         seekbar = (SeekBar) findViewById(R.id.sb_play);
         seekbar.setOnSeekBarChangeListener(new MySeekbar());
+        seekbar.setVisibility(View.INVISIBLE);
+
         playMusicBtn = (Button) findViewById(R.id.play_music);
         pauseMusicBtn = (Button) findViewById(R.id.pause_music);
         pauseMusicBtn.setVisibility(View.INVISIBLE);
 
         playMusicBtn.setOnClickListener(new PlayOrPauseListener());
-
         pauseMusicBtn.setOnClickListener(new PlayOrPauseListener());
         //显示actionbar上的返回
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -169,12 +171,12 @@ public class RecordListActivity extends ListActivity {
         public void onClick(View v) {
             if (mPlayer != null) {
                 //如果是正在播放，则点击即为暂停
-                    if (isPlay) {
-                        playMusicBtn.setVisibility(View.VISIBLE);
-                        pauseMusicBtn.setVisibility(View.INVISIBLE);
-                        isPlay = false;
-                        mPlayer.pause();
-                    } else {
+                if (isPlay) {
+                    playMusicBtn.setVisibility(View.VISIBLE);
+                    pauseMusicBtn.setVisibility(View.INVISIBLE);
+                    isPlay = false;
+                    mPlayer.pause();
+                } else {
                     //不是正在播放，即点击要进行播放
                     playMusicBtn.setVisibility(View.INVISIBLE);
                     pauseMusicBtn.setVisibility(View.VISIBLE);
@@ -303,6 +305,7 @@ public class RecordListActivity extends ListActivity {
                         menu.findItem(R.id.menu_del).setVisible(false);
                         menu.findItem(R.id.menu_share).setVisible(false);
                         menu.findItem(R.id.menu_search).setVisible(true);
+                        seekbar.setVisibility(View.INVISIBLE);
                     }
                 }).setNegativeButton("cancel", null).show();
             return true;
@@ -321,6 +324,7 @@ public class RecordListActivity extends ListActivity {
                         menu.findItem(R.id.menu_del).setVisible(false);
                         menu.findItem(R.id.menu_share).setVisible(false);
                         menu.findItem(R.id.menu_search).setVisible(true);
+                        seekbar.setVisibility(View.INVISIBLE);
                     }
                 }).setNegativeButton("cancel", null).show();
             return true;
