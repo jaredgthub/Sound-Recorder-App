@@ -47,7 +47,6 @@ public class SearchActivity extends ListActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //TODO 暂时显示到本界面
                 resultTV.setText(query);
                 adapter.changeCursor(recordDao.findRecordByName(query));
                 // 跳转到搜索结果界面

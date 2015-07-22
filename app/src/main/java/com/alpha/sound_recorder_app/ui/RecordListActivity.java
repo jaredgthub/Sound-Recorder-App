@@ -66,6 +66,9 @@ public class RecordListActivity extends ListActivity {
     private Timer timer;
     private TimerTask timerTask;
 
+    Button playMusicBtn;
+    Button pauseMusicBtn;
+
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             Toast.makeText(getApplicationContext(), "up load success! ", Toast.LENGTH_SHORT).show();
@@ -148,42 +151,54 @@ public class RecordListActivity extends ListActivity {
         //播放音乐
         seekbar = (SeekBar) findViewById(R.id.sb_play);
         seekbar.setOnSeekBarChangeListener(new MySeekbar());
-        Button playMusicBtn = (Button) findViewById(R.id.play_music);
-        playMusicBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mPlayer != null){
-                    //如果是正在播放，则点击即为暂停
-                    if(isPlay){
-                        isPlay = false;
-                        mPlayer.pause();
-                    }else{
-                        //不是正在播放，即点击要进行播放
-                        isPlay = true;
-                        mPlayer.start();
-                        seekbar.setMax(mPlayer.getDuration());
-                        timer = new Timer();
-                        isChanging = false;
-                        timerTask = new TimerTask() {
-                            @Override
-                            public void run() {
-                                if(isChanging){
-                                    return;
-                                }else{
-                                    seekbar.setProgress(mPlayer.getCurrentPosition());
-                                }
-                            }
-                        };
-                        timer.schedule(timerTask, 0, 10);
-                        mPlayer.start();
-                    }
-                }
-            }
-        });
+        playMusicBtn = (Button) findViewById(R.id.play_music);
+        pauseMusicBtn = (Button) findViewById(R.id.pause_music);
+        pauseMusicBtn.setVisibility(View.INVISIBLE);
+
+        playMusicBtn.setOnClickListener(new PlayOrPauseListener());
+
+        pauseMusicBtn.setOnClickListener(new PlayOrPauseListener());
         //显示actionbar上的返回
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         clearNotification();
+    }
+
+    private class PlayOrPauseListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (mPlayer != null) {
+                //如果是正在播放，则点击即为暂停
+                    if (isPlay) {
+                        playMusicBtn.setVisibility(View.VISIBLE);
+                        pauseMusicBtn.setVisibility(View.INVISIBLE);
+                        isPlay = false;
+                        mPlayer.pause();
+                    } else {
+                    //不是正在播放，即点击要进行播放
+                    playMusicBtn.setVisibility(View.INVISIBLE);
+                    pauseMusicBtn.setVisibility(View.VISIBLE);
+
+                    isPlay = true;
+                    mPlayer.start();
+                    seekbar.setMax(mPlayer.getDuration());
+                    timer = new Timer();
+                    isChanging = false;
+                    timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (isChanging) {
+                                return;
+                            } else {
+                                seekbar.setProgress(mPlayer.getCurrentPosition());
+                            }
+                        }
+                    };
+                    timer.schedule(timerTask, 0, 10);
+                    mPlayer.start();
+                }
+            }
+        }
     }
 
     private void playerFinish() {
@@ -193,6 +208,8 @@ public class RecordListActivity extends ListActivity {
                 isPlay = false;
                 mPlayer.seekTo(0);
                 mPlayer.pause();
+                playMusicBtn.setVisibility(View.VISIBLE);
+                pauseMusicBtn.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -254,7 +271,7 @@ public class RecordListActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(record == null){
+        if(record == null && id != android.R.id.home){
             Toast.makeText(RecordListActivity.this, "haven't choose any file.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -388,13 +405,13 @@ public class RecordListActivity extends ListActivity {
 
         @Override
         public void onSuccess() {
-            Toast.makeText(RecordListActivity.this, "share success! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RecordListActivity.this, "share success! ", Toast.LENGTH_LONG).show();
             Log.d("Test", "share success");
         }
 
         @Override
         public void onFailure(int errCode, String errMsg) {
-            Toast.makeText(RecordListActivity.this, "share fail!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RecordListActivity.this, "share fail!", Toast.LENGTH_LONG).show();
             Log.d("Test","share errCode "+errCode);
         }
 

@@ -7,13 +7,17 @@
     <!--</style>-->
 
     <style name="settings_style" parent="@android:style/Theme.Holo.Light">
-        <item name="android:background">@drawable/background3</item>
-        <!--//TODO make better ui.-->
-        <!--<item name="android:actionBarStyle">@style/settings_actionBar</item>-->
+        <!--<item name="android:background">@drawable/background3</item>-->
+        <item name="android:actionBarStyle">@style/settings_actionBar</item>
     </style>
 
     <style name="settings_actionBar" parent="android:Widget.ActionBar">
-        <!--<item name="android:textColor">#fff</item>-->
+        <item name="android:background">@color/yellow</item>
+        <item name="android:titleTextStyle">@style/settings_actionBar_text</item>
+    </style>
+
+    <style name="settings_actionBar_text" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>
