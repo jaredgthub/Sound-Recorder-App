@@ -3,6 +3,7 @@ package com.alpha.sound_recorder_app.ui;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -31,13 +33,13 @@ import java.util.Date;
 public class RecordListActivity extends ListActivity {
 
     private SimpleCursorAdapter adapter;
-    private Db db;
     private RecordDao recordDao;
 
     private MediaPlayer mPlayer = null;
 
     private Record record;
     private EditText editText;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class RecordListActivity extends ListActivity {
                 record.set_id(itemId);
                 record.setName(c.getString(c.getColumnIndex("name")));
 
+                menu.findItem(R.id.menu_rename).setVisible(true);
+                menu.findItem(R.id.menu_del).setVisible(true);
+                menu.findItem(R.id.menu_search).setVisible(false);
                 //此次长按有效，返回true
                 return true;
             }
@@ -114,6 +119,9 @@ public class RecordListActivity extends ListActivity {
                 }
             }
         });
+
+        //显示actionbar上的返回
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void refreshListView(){
@@ -125,6 +133,29 @@ public class RecordListActivity extends ListActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.menu_record_list, menu);
+        this.menu = menu;
+
+        // 搜索
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search)
+                .getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                resultTV.setText(query);
+                adapter.changeCursor(recordDao.findRecordByName(query));
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                resultTV.setText(newText);
+                adapter.changeCursor(recordDao.findRecordByName(newText));
+                return true;
+            }
+        });
+
+        menu.findItem(R.id.menu_rename).setVisible(false);
+        menu.findItem(R.id.menu_del).setVisible(false);
         return true;
     }
 
@@ -162,6 +193,9 @@ public class RecordListActivity extends ListActivity {
                             } else {
                                 Toast.makeText(RecordListActivity.this, "rename fail!", Toast.LENGTH_SHORT).show();
                             }
+                            menu.findItem(R.id.menu_rename).setVisible(false);
+                            menu.findItem(R.id.menu_del).setVisible(false);
+                            menu.findItem(R.id.menu_search).setVisible(true);
                         }
                     }).setNegativeButton("cancel", null).show();
             }
@@ -180,9 +214,23 @@ public class RecordListActivity extends ListActivity {
                                 Toast.makeText(RecordListActivity.this, "delete fail! ", Toast.LENGTH_LONG).show();
                             }
                             refreshListView();
+                            menu.findItem(R.id.menu_rename).setVisible(false);
+                            menu.findItem(R.id.menu_del).setVisible(false);
+                            menu.findItem(R.id.menu_search).setVisible(true);
                         }
                     }).setNegativeButton("cancel", null).show();
             }
+            return true;
+        }else if(id == android.R.id.home){
+            //actionbar上的返回
+            if(menu.findItem(R.id.menu_search).isVisible()){
+                startActivity(new Intent(RecordListActivity.this,MainActivity.class));
+            }else{
+                menu.findItem(R.id.menu_rename).setVisible(false);
+                menu.findItem(R.id.menu_del).setVisible(false);
+                menu.findItem(R.id.menu_search).setVisible(true);
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

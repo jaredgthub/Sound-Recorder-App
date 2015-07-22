@@ -5,10 +5,10 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="always" />
 
-    <item android:id="@+id/menu_search"
-        android:title="Search"
-        android:icon="@drawable/icon_search"
-        android:showAsAction="collapseActionView|ifRoom"
-        android:actionViewClass="android.widget.SearchView"
-        tools:ignore="AppCompatResource" />
+    <!--<item android:id="@+id/menu_search"-->
+        <!--android:title="Search"-->
+        <!--android:icon="@drawable/icon_search"-->
+        <!--android:showAsAction="collapseActionView|ifRoom"-->
+        <!--android:actionViewClass="android.widget.SearchView"-->
+        <!--tools:ignore="AppCompatResource" />-->
 </menu>
