@@ -5,4 +5,15 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 
+    <item android:id="@+id/menu_rename"
+        android:title="rename"
+        android:icon="@drawable/actionbar_renamebutton"
+        android:showAsAction="collapseActionView|ifRoom"
+        tools:ignore="AppCompatResource" />
+
+    <item android:id="@+id/menu_del"
+        android:title="delete"
+        android:icon="@drawable/actionbar_deletebutton"
+        android:showAsAction="collapseActionView|ifRoom"
+        tools:ignore="AppCompatResource" />
 </menu>

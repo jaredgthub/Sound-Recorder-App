@@ -2,11 +2,9 @@ package com.alpha.sound_recorder_app.util;
 
 import android.os.Environment;
 
-import java.util.Calendar;
+import com.alpha.sound_recorder_app.model.Record;
 
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import java.util.Calendar;
 
 /**
  * Created by huangshihe on 2015/7/16.
@@ -36,17 +34,28 @@ public class Global {
         return "" + year + month + days + hour + minutes + seconds + MI;
     }
 
-    public static byte[] hmacSHA1Encrypt(String encryptText, String encryptKey)
-            throws Exception {
-        byte[] data = encryptKey.getBytes("UTF-8");
-        // 根据给定的字节数组构造一个密钥,第二参数指定一个密钥算法的名称
-        SecretKey secretKey = new SecretKeySpec(data, "HmacSHA1");
-        // 生成一个指定 Mac 算法 的 Mac 对象
-        Mac mac = Mac.getInstance("HmacSHA1");
-        // 用给定密钥初始化 Mac 对象
-        mac.init(secretKey);
-        byte[] text = encryptText.getBytes("UTF-8");
-        // 完成 Mac 操作
-        return mac.doFinal(text);
+    public static String getSuffix(Record record){
+        String name = record.getName();
+        String suffix = name.substring(name.lastIndexOf("."), name.length());
+        return suffix;
     }
+
+    public static String getSuffix(int type){
+        String suffix;
+        switch (type){
+            case Global.TYPE_WAV:suffix = "wav";break;
+            case Global.TYPE_AWR:suffix = "awr";break;
+            default:suffix = "awr";
+        }
+        return suffix;
+    }
+
+    public static String getSuffix(String name){
+        return name.substring(name.lastIndexOf("."), name.length());
+    }
+
+    public static String getFileNameWithoutSuffix(String name){
+        return name.substring(0,name.lastIndexOf("."));
+    }
+
 }

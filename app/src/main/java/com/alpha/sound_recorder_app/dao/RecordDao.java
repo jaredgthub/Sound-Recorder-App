@@ -56,7 +56,7 @@ public class RecordDao {
     }
 
     public boolean delRecord(int _id){
-        Cursor cursor = dbRead.query("record",null,"_id=?",new String[]{""+_id},null,null,null);
+        Cursor cursor = dbRead.query("record", null, "_id=?", new String[]{"" + _id}, null, null, null);
 
         while(cursor.moveToNext()){
             String name = cursor.getString(cursor.getColumnIndex("name"));
@@ -73,6 +73,12 @@ public class RecordDao {
 
     public Cursor findRecordByName(String name){
         return dbRead.query("record",null,"name like ?",new String[]{"%"+name+"%"},null,null,"_id desc");
+    }
+
+    public boolean updateRecordFileName(int _id,String name){
+        ContentValues cv = new ContentValues();
+        cv.put("name",name);
+        return dbWrite.update("record",cv,"_id=?",new String[]{""+_id}) == 1;
     }
 
     public void close(){
