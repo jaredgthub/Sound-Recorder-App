@@ -59,7 +59,6 @@ public class SearchActivity extends ListActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // TODO Auto-generated method stub
                 resultTV.setText(newText);
                 adapter.changeCursor(recordDao.findRecordByName(newText));
                 return true;

@@ -54,7 +54,6 @@ public class ShareActivity extends Activity {
         };
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +87,7 @@ public class ShareActivity extends Activity {
         btnUploadtoQiniu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CommonUploadUtils(handler).runUpload();
+//                new CommonUploadUtils(handler).runUpload();
             }
         });
     }

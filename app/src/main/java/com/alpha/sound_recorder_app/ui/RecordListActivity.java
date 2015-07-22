@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +26,14 @@ import com.alpha.sound_recorder_app.dao.RecordDao;
 import com.alpha.sound_recorder_app.model.BaseRecord;
 import com.alpha.sound_recorder_app.model.Record;
 import com.alpha.sound_recorder_app.model.RecordAwr;
+import com.alpha.sound_recorder_app.util.CommonUploadUtils;
+import com.alpha.sound_recorder_app.util.DownloadUtil;
 import com.alpha.sound_recorder_app.util.Global;
+import com.baidu.frontia.Frontia;
+import com.baidu.frontia.api.FrontiaAuthorization;
+import com.baidu.frontia.api.FrontiaSocialShare;
+import com.baidu.frontia.api.FrontiaSocialShareContent;
+import com.baidu.frontia.api.FrontiaSocialShareListener;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -52,6 +61,14 @@ public class RecordListActivity extends ListActivity {
     private Timer timer;
     private TimerTask timerTask;
 
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            Toast.makeText(getApplicationContext(), "up load success! ", Toast.LENGTH_SHORT).show();
+        };
+    };
+    private FrontiaSocialShare mSocialShare;
+    private FrontiaSocialShareContent mImageContent = new FrontiaSocialShareContent();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +93,7 @@ public class RecordListActivity extends ListActivity {
 
                 menu.findItem(R.id.menu_rename).setVisible(true);
                 menu.findItem(R.id.menu_del).setVisible(true);
+                menu.findItem(R.id.menu_share).setVisible(true);
                 menu.findItem(R.id.menu_search).setVisible(false);
                 //此次长按有效，返回true
                 return true;
@@ -220,6 +238,7 @@ public class RecordListActivity extends ListActivity {
 
         menu.findItem(R.id.menu_rename).setVisible(false);
         menu.findItem(R.id.menu_del).setVisible(false);
+        menu.findItem(R.id.menu_share).setVisible(false);
         return true;
     }
 
@@ -230,70 +249,102 @@ public class RecordListActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(record == null){
+            Toast.makeText(RecordListActivity.this, "haven't choose any file.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }else if(id == R.id.menu_rename){
-            if (record == null) {
-                Toast.makeText(RecordListActivity.this, "haven't choose any file.", Toast.LENGTH_SHORT).show();
-            } else {
-                new AlertDialog.Builder(RecordListActivity.this)
-                    .setTitle("Rename")
-                    .setMessage(Global.getFileNameWithoutSuffix(record.getName()))
-                    .setIcon(R.drawable.actionbar_renamebutton)
-                    .setView(editText = new EditText(RecordListActivity.this))
-                    .setPositiveButton("sure", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            //TODO 只能输入数字和英文（不能有空格和 '.' ）
-                            String newname = editText.getText().toString();
-                            String oldname = record.getName();
-                            File oldFile = new File(Global.PATH + oldname);
-                            File newFile = new File(Global.PATH + newname + Global.getSuffix(oldname));
-                            oldFile.renameTo(newFile);
-                            if (recordDao.updateRecordFileName(record.get_id(), newFile.getName())) {
-                                refreshListView();
-                                Toast.makeText(RecordListActivity.this, "rename success!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(RecordListActivity.this, "rename fail!", Toast.LENGTH_SHORT).show();
-                            }
-                            menu.findItem(R.id.menu_rename).setVisible(false);
-                            menu.findItem(R.id.menu_del).setVisible(false);
-                            menu.findItem(R.id.menu_search).setVisible(true);
+            new AlertDialog.Builder(RecordListActivity.this)
+                .setTitle("Rename")
+                .setMessage(Global.getFileNameWithoutSuffix(record.getName()))
+                .setIcon(R.drawable.actionbar_renamebutton)
+                .setView(editText = new EditText(RecordListActivity.this))
+                .setPositiveButton("sure", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int position) {
+                        //TODO 只能输入数字和英文（不能有空格和 '.' ）
+                        String newname = editText.getText().toString();
+                        String oldname = record.getName();
+                        File oldFile = new File(Global.PATH + oldname);
+                        File newFile = new File(Global.PATH + newname + Global.getSuffix(oldname));
+                        oldFile.renameTo(newFile);
+                        if (recordDao.updateRecordFileName(record.get_id(), newFile.getName())) {
+                            refreshListView();
+                            Toast.makeText(RecordListActivity.this, "rename success!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RecordListActivity.this, "rename fail!", Toast.LENGTH_SHORT).show();
                         }
-                    }).setNegativeButton("cancel", null).show();
-            }
+                        menu.findItem(R.id.menu_rename).setVisible(false);
+                        menu.findItem(R.id.menu_del).setVisible(false);
+                        menu.findItem(R.id.menu_share).setVisible(false);
+                        menu.findItem(R.id.menu_search).setVisible(true);
+                    }
+                }).setNegativeButton("cancel", null).show();
             return true;
         }else if(id == R.id.menu_del){
-            if(record == null){
-                Toast.makeText(RecordListActivity.this, "haven't choose any file.", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(RecordListActivity.this).setTitle("delete").setMessage("are you sure del?")
+                .setPositiveButton("sure", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (recordDao.delRecord(record.get_id())) {
+                            Toast.makeText(RecordListActivity.this, "delete success! ", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RecordListActivity.this, "delete fail! ", Toast.LENGTH_LONG).show();
+                        }
+                        refreshListView();
+                        menu.findItem(R.id.menu_rename).setVisible(false);
+                        menu.findItem(R.id.menu_del).setVisible(false);
+                        menu.findItem(R.id.menu_share).setVisible(false);
+                        menu.findItem(R.id.menu_search).setVisible(true);
+                    }
+                }).setNegativeButton("cancel", null).show();
+            return true;
+        }else if(id == R.id.menu_share){
+            //upload and share.
+            boolean isInit = Frontia.init(getApplicationContext(), "wBk3HUHSnGPzGw9V43B2UTWz");
+            if(isInit){
+                //Use Frontia
+                mSocialShare = Frontia.getSocialShare();
+                mSocialShare.setContext(this);
+                mSocialShare.setClientId(FrontiaAuthorization.MediaType.SINAWEIBO.toString(), "2788353227");
+//        mSocialShare.setClientId(MediaType.QZONE.toString(), "100358052");
+//        mSocialShare.setClientId(MediaType.QQFRIEND.toString(), "100358052");
+//        mSocialShare.setClientName(MediaType.QQFRIEND.toString(), "百度");
+//        mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
+                mImageContent.setTitle("alpha sound recorder app");
+                mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
+                //分享的链接地址，应该为录音的存储位置(不能用空格)
+                mImageContent.setLinkUrl(DownloadUtil.getUrl(record.getName()));
             }else{
-                new AlertDialog.Builder(RecordListActivity.this).setTitle("delete").setMessage("are you sure del?")
-                    .setPositiveButton("sure", new DialogInterface.OnClickListener() {
+                System.out.println("error in init");
+                Toast.makeText(RecordListActivity.this, "init error!", Toast.LENGTH_LONG).show();
+            }
+            //upload the file!
+            new CommonUploadUtils(handler).runUpload(record.getName());
+            new AlertDialog.Builder(RecordListActivity.this)
+                .setTitle("share?")
+                .setMessage("are you sure share this record?")
+                .setPositiveButton("sure", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (recordDao.delRecord(record.get_id())) {
-                                Toast.makeText(RecordListActivity.this, "delete success! ", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(RecordListActivity.this, "delete fail! ", Toast.LENGTH_LONG).show();
-                            }
-                            refreshListView();
-                            menu.findItem(R.id.menu_rename).setVisible(false);
-                            menu.findItem(R.id.menu_del).setVisible(false);
-                            menu.findItem(R.id.menu_search).setVisible(true);
+                            mSocialShare.share(mImageContent, FrontiaAuthorization.MediaType.BATCHSHARE.toString(), new ShareListener(), true);
                         }
-                    }).setNegativeButton("cancel", null).show();
-            }
+                    }
+                ).setNegativeButton("cancel", null).show();
             return true;
         }else if(id == android.R.id.home){
             //actionbar上的返回
             if(menu.findItem(R.id.menu_search).isVisible()){
                 //TODO need to test back function!
-                finish();
                 startActivity(new Intent(RecordListActivity.this,MainActivity.class));
+                finish();
             }else{
                 menu.findItem(R.id.menu_rename).setVisible(false);
                 menu.findItem(R.id.menu_del).setVisible(false);
+                menu.findItem(R.id.menu_share).setVisible(false);
                 menu.findItem(R.id.menu_search).setVisible(true);
             }
             return true;
@@ -326,6 +377,28 @@ public class RecordListActivity extends ListActivity {
         public boolean accept(File dir, String name){
             return (name.endsWith(".amr") || name.endsWith(".wav"));
         }
+    }
+
+    private class ShareListener implements FrontiaSocialShareListener {
+
+        @Override
+        public void onSuccess() {
+            Toast.makeText(RecordListActivity.this, "share success! ", Toast.LENGTH_SHORT).show();
+            Log.d("Test", "share success");
+        }
+
+        @Override
+        public void onFailure(int errCode, String errMsg) {
+            Toast.makeText(RecordListActivity.this, "share fail!", Toast.LENGTH_SHORT).show();
+            Log.d("Test","share errCode "+errCode);
+        }
+
+        @Override
+        public void onCancel() {
+            Log.d("Test","cancel ");
+            Toast.makeText(RecordListActivity.this, "you cancel this share!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

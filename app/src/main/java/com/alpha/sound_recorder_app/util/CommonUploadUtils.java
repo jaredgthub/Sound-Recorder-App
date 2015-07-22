@@ -29,23 +29,15 @@ public class CommonUploadUtils {
         this.handler = handler;
     }
 
-    public void runUpload() {
+    public void runUpload(String name) {
+        f = new File(Global.PATH + name);
         new MyUploadRunnalbe().run();
     }
 
     class MyUploadRunnalbe implements Runnable {
         public void run() {
-            try {
-                String tString = Environment.getExternalStorageDirectory().getAbsolutePath() + "/alpha/records/";
-                f = new File(tString + "test.txt");
-                if(!f.exists()){
-                    f.createNewFile();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //上传文件的名字hsh
-            expectKey = "test.txt";
+            //上传文件的名字
+            expectKey = f.getName();
             uploadManager.put(f, expectKey, QiNiuConfig.token, new UpCompletionHandler() {
                 public void complete(String k, ResponseInfo rinfo, JSONObject response) {
                     Message msg = new Message();
