@@ -2,6 +2,11 @@ package com.alpha.sound_recorder_app.ui;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -177,6 +182,8 @@ public class RecordListActivity extends ListActivity {
         });
         //显示actionbar上的返回
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        clearNotification();
     }
 
     private void playerFinish() {
@@ -218,12 +225,10 @@ public class RecordListActivity extends ListActivity {
         this.menu = menu;
 
         // 搜索
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search)
-                .getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                resultTV.setText(query);
                 adapter.changeCursor(recordDao.findRecordByName(query));
                 return true;
             }
@@ -398,7 +403,43 @@ public class RecordListActivity extends ListActivity {
             Log.d("Test","cancel ");
             Toast.makeText(RecordListActivity.this, "you cancel this share!", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    //notification
+    private void showNotification() {
+        NotificationManager barmanager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notice = new Notification(android.R.drawable.ic_media_play,"Record is running...",System.currentTimeMillis());
+
+        notice.flags= Notification.FLAG_AUTO_CANCEL;
+        Intent appIntent = new Intent(Intent.ACTION_MAIN);
+        appIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        appIntent.setComponent(new ComponentName(this.getPackageName(), this.getPackageName() + "." + this.getLocalClassName()));
+        appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);//启动
+        PendingIntent contentIntent =PendingIntent.getActivity(this, 0,appIntent,0);
+        notice.setLatestEventInfo(this,"Sound-Recorder-App","running", contentIntent);
+        barmanager.notify(0,notice);
+    }
+
+    private void clearNotification(){
+        // 启动后删除之前我们定义的通知
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+    }
+
+    @Override
+    protected void onStop() {
+        if(isPlay){
+            showNotification();
+        }
+        isChanging = true;
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        clearNotification();
+        isChanging = false;
+        super.onStart();
     }
 
     @Override
