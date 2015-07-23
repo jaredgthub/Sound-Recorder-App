@@ -181,7 +181,6 @@ public class MainActivity extends Activity {
         }, 0, 1000);
     }
 
-    //TODO 完全退出
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK ){

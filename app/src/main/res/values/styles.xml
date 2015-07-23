@@ -12,7 +12,7 @@
         <item name="android:actionBarStyle">@style/actionBar_style</item>
     </style>
     
-    <style name="settings_style">
+    <style name="settings_style" parent="@android:style/Theme.Holo.Light">
         <!--<item name="android:cacheColorHint">#ffffffff</item>-->
         <!--<item name="android:background">@color/yellow</item>-->
         <!--<item name="android:backgroundStacked">@color/yellow</item>-->
