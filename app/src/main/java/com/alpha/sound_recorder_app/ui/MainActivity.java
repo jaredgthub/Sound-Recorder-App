@@ -18,6 +18,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,10 +69,8 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         bar = getActionBar();
         bar.hide();
-
         showTimeTV = (TextView) findViewById(R.id.showTimeTV);
         showTimeTV.setText("00:00");
 

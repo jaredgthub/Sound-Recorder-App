@@ -364,8 +364,8 @@ public class RecordListActivity extends ListActivity {
         }else if(id == android.R.id.home){
             //actionbar上的返回
             if(menu.findItem(R.id.menu_search).isVisible()){
-                //TODO need to test back function!
-                startActivity(new Intent(RecordListActivity.this,MainActivity.class));
+                //不能new Intent，否则当前的activity没有destroy
+//                startActivity(new Intent(RecordListActivity.this,MainActivity.class));
                 finish();
             }else{
                 menu.findItem(R.id.menu_rename).setVisible(false);
