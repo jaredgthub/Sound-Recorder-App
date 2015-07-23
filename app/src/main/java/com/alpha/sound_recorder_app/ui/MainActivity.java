@@ -69,8 +69,8 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bar = getActionBar();
-        bar.hide();
+//        bar = getActionBar();
+//        bar.hide();
         showTimeTV = (TextView) findViewById(R.id.showTimeTV);
         showTimeTV.setText("00:00");
 
