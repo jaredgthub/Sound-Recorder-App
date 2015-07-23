@@ -68,5 +68,15 @@ public class Global {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("hh:mm:ss");
         return format.format(gc.getTime());
     }
+    public static boolean isLegal(String name){
+        if(name == null || "".equals(name.trim())){
+            return false;
+        }
+        if(name.contains(" ") || name.contains(".")){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
 }

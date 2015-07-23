@@ -71,7 +71,7 @@ public class RecordListActivity extends ListActivity {
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            Toast.makeText(getApplicationContext(), "up load success! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "upload success! ", Toast.LENGTH_SHORT).show();
         };
     };
     private FrontiaSocialShare mSocialShare;
@@ -273,7 +273,7 @@ public class RecordListActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(record == null && id != android.R.id.home){
+        if(record == null && (id == R.id.menu_del || id == R.id.menu_share || id == R.id.menu_rename)){
             Toast.makeText(RecordListActivity.this, "haven't choose any file.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -289,8 +289,11 @@ public class RecordListActivity extends ListActivity {
                 .setPositiveButton("sure", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int position) {
-                        //TODO 只能输入数字和英文（不能有空格和 '.' ）
                         String newname = editText.getText().toString();
+                        if (!Global.isLegal(newname)) {
+                            Toast.makeText(RecordListActivity.this, "text not legal", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         String oldname = record.getName();
                         File oldFile = new File(Global.PATH + oldname);
                         File newFile = new File(Global.PATH + newname + Global.getSuffix(oldname));
@@ -310,7 +313,7 @@ public class RecordListActivity extends ListActivity {
                 }).setNegativeButton("cancel", null).show();
             return true;
         }else if(id == R.id.menu_del){
-            new AlertDialog.Builder(RecordListActivity.this).setTitle("delete").setMessage("are you sure del?")
+            new AlertDialog.Builder(RecordListActivity.this).setTitle("delete").setMessage("del "+record.getName()+"?")
                 .setPositiveButton("sure", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -341,18 +344,17 @@ public class RecordListActivity extends ListActivity {
 //        mSocialShare.setClientName(MediaType.QQFRIEND.toString(), "百度");
 //        mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
                 mImageContent.setTitle("alpha sound recorder app");
-                mImageContent.setContent("I have a sound want to share, you can download our sound-recorder-app also. ");
+                mImageContent.setContent("Check out this recording I made with this great new android app. You can get the app here: ");
                 //分享的链接地址，应该为录音的存储位置(不能用空格)
                 mImageContent.setLinkUrl(DownloadUtil.getUrl(record.getName()));
             }else{
-                System.out.println("error in init");
                 Toast.makeText(RecordListActivity.this, "init error!", Toast.LENGTH_LONG).show();
             }
             //upload the file!
             new CommonUploadUtils(handler).runUpload(record.getName());
             new AlertDialog.Builder(RecordListActivity.this)
                 .setTitle("share?")
-                .setMessage("are you sure share this record?")
+                .setMessage("share record  "+ record.getName() + " ?")
                 .setPositiveButton("sure", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -375,7 +377,6 @@ public class RecordListActivity extends ListActivity {
             }
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

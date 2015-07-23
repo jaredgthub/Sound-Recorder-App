@@ -7,17 +7,18 @@
         <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
     <!--</style>-->
 
-    <style name="settings_style" parent="@android:style/Theme.Holo.Light">
+    <style name="app_style" parent="@android:style/Theme.Holo.Light">
         <!--<item name="android:background">@drawable/background3</item>-->
-        <item name="android:actionBarStyle">@style/settings_actionBar</item>
+        <item name="android:actionBarStyle">@style/actionBar_style</item>
+        <item name="android:windowBackground">@drawable/wallpaper2</item>
     </style>
 
-    <style name="settings_actionBar" parent="android:Widget.ActionBar">
-        <item name="android:background">@color/yellow</item>
-        <item name="android:titleTextStyle">@style/settings_actionBar_text</item>
+    <style name="actionBar_style" parent="android:Widget.ActionBar">
+        <item name="android:background">@color/actionBarColor</item>
+        <item name="android:titleTextStyle">@style/actionBar_text_style</item>
     </style>
 
-    <style name="settings_actionBar_text" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <style name="actionBar_text_style" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
     </style>
 

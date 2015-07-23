@@ -6,10 +6,7 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="record_maxTime">max time</string>
-    <string name="record_maxTime_default">0</string>
-
-    <string name="record_type">change type</string>
+    <string name="record_type">record type</string>
 
     <string-array name="record_type_list_name">
         <item>amr</item>

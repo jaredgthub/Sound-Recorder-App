@@ -37,7 +37,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_small"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:name="com.baidu.frontia.FrontiaApplication"
@@ -54,12 +54,13 @@
         </activity>
         <activity
             android:name=".ui.RecordListActivity"
+            android:theme="@style/app_style"
             android:label="@string/title_activity_record_list" >
         </activity>
 
         <activity
             android:name=".ui.SettingsActivity"
-            android:theme="@style/settings_style"
+            android:theme="@style/app_style"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity

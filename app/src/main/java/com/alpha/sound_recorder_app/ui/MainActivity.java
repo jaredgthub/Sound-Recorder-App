@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
     private Button stopRecordBtn;
     private Button showListBtn;
     private Button settingsBtn;
-    private Button shareBtn;
     private Timer timer = new Timer();
 
     private TextView showTimeTV;
@@ -151,14 +150,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
-
-        shareBtn = (Button) findViewById(R.id.shareBtn);
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,ShareActivity.class));
             }
         });
     }

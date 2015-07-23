@@ -10,16 +10,6 @@
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/shareBtn"
-        android:typeface="serif"
-        android:background="@xml/pressedbuttonprofile"
-        android:layout_alignTop="@+id/showListBtn"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="70dp"
-        android:layout_height="70dp"
         android:id="@+id/showListBtn"
         android:typeface="serif"
         android:background="@xml/pressedbuttonfile"
@@ -36,18 +26,20 @@
         android:layout_gravity="center"
         android:nestedScrollingEnabled="false"
         android:longClickable="true"
-        android:layout_above="@+id/shareBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp" />
+        android:layout_above="@+id/showListBtn"
+        android:layout_alignRight="@+id/stopRecordBtn"
+        android:layout_alignEnd="@+id/stopRecordBtn"
+        android:layout_marginBottom="32dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/showTimeTV"
         android:textSize="50sp"
+        android:text="00:00"
         android:textAlignment="center"
-        android:textColor="#ffffc612"
-        android:layout_alignParentTop="true"
+        android:textColor="@color/white"
+        android:layout_above="@+id/stopRecordBtn"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -55,10 +47,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/stopRecordBtn"
         android:background="@xml/pressedbuttonfinish"
-        android:layout_below="@id/showTimeTV"
         android:layout_above="@+id/startRecordBtn"
-        android:layout_alignRight="@id/startRecordBtn"
-        android:layout_alignEnd="@id/startRecordBtn" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="70dp"
@@ -66,8 +56,8 @@
         android:id="@+id/settingsBtn"
         android:typeface="serif"
         android:background="@xml/pressedbuttonsettings"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -2,4 +2,5 @@
 <resources>
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFD700</color>
+    <color name="actionBarColor">#983219</color>
 </resources>

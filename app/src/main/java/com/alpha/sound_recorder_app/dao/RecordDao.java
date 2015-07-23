@@ -34,10 +34,11 @@ public class RecordDao {
 
     public boolean addRecord(BaseRecord record){
         //获得文件的时间和大小
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(Global.PATH + record.getName());
-        String length = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//毫秒，String
-        record.setLength(Long.parseLong(length));
+//        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//        mmr.setDataSource(Global.PATH + record.getName());
+//        String length = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//毫秒，String
+//        record.setLength(Long.parseLong(length));
+        record.setLength(0);
 //        String length = Global.millisecondToDate(recordLen);
 
         Cursor cursor = getAllRecord();
