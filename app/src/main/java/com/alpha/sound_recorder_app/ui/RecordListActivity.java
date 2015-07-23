@@ -344,7 +344,7 @@ public class RecordListActivity extends ListActivity {
 //        mSocialShare.setClientName(MediaType.QQFRIEND.toString(), "百度");
 //        mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
                 mImageContent.setTitle("alpha sound recorder app");
-                mImageContent.setContent("Check out this recording I made with this great new android app. You can get the app here: ");
+                mImageContent.setContent("Check out this recording I made with this great new android app. You can get the app here: http://pan.baidu.com/s/1hqhbm5I");
                 //分享的链接地址，应该为录音的存储位置(不能用空格)
                 mImageContent.setLinkUrl(DownloadUtil.getUrl(record.getName()));
             }else{
