@@ -49,7 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
         setupSimplePreferencesScreen();
 
 //        getListView().setBackground(getResources().getDrawable(R.drawable.wallpaper2));
-        getListView().setBackgroundColor(Color.rgb(76, 76, 76));
+//        this.getListView().setCacheColorHint(Color.parseColor("#00000000"));
         //显示actionbar上的返回
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }

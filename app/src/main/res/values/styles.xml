@@ -10,7 +10,21 @@
     <style name="app_style" parent="@android:style/Theme.Holo.Light">
         <!--<item name="android:background">@drawable/background3</item>-->
         <item name="android:actionBarStyle">@style/actionBar_style</item>
-        <item name="android:windowBackground">@drawable/wallpaper2</item>
+    </style>
+    
+    <style name="settings_style">
+        <!--<item name="android:cacheColorHint">#ffffffff</item>-->
+        <!--<item name="android:background">@color/yellow</item>-->
+        <!--<item name="android:backgroundStacked">@color/yellow</item>-->
+        <!--<item name="android:keyBackground">@color/yellow</item>-->
+        <!--<item name="android:backgroundSplit">@color/yellow</item>-->
+        <!--<item name="android:popupBackground">@color/yellow</item>-->
+        <!--<item name="android:colorBackgroundCacheHint">@color/yellow</item>-->
+        <!--<item name="android:panelColorBackground">@color/yellow</item>-->
+        <!--<item name="android:cacheColorHint">#00000000</item>-->
+        <!--<item name="android:panelBackground">@color/yellow</item>-->
+        <!--<item name="android:colorBackground">@color/yellow</item>-->
+        <item name="android:actionBarStyle">@style/actionBar_style</item>
     </style>
 
     <style name="actionBar_style" parent="android:Widget.ActionBar">
